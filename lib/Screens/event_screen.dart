@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/welcome_screen.dart';
 import 'package:mission_app/components/sign_in.dart';
 import 'package:mission_app/components/rounded_button.dart';
+import 'package:mission_app/components/add_events.dart';
 
 class EventScreen extends StatelessWidget {
   static const String id = 'event_screen';
@@ -11,6 +11,16 @@ class EventScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            showModalBottomSheet(context: context, builder: (context) => TaskScreen());
+          },
+          backgroundColor: Color(0xffeb1555),
+          child: Icon(
+            Icons.add,
+            size: 32,
+          ),
+        ),
         body: Column(
           children: [
             Container(
@@ -93,23 +103,26 @@ class EventScreen extends StatelessWidget {
                     Icons.near_me,
                     color: Colors.white,
                     size: 24,
-                    semanticLabel: 'All Events',
+                    semanticLabel: 'Near Me',
                   ),
                   Icon(
                     Icons.check_box,
                     color: Colors.white,
                     size: 24,
-                    semanticLabel: 'All Events',
+                    semanticLabel: 'Attending',
                   ),
                   Icon(
                     Icons.perm_contact_calendar,
                     color: Colors.white,
                     size: 24,
-                    semanticLabel: 'All Events',
+                    semanticLabel: 'My Events',
                   ),
                 ],
               ),
             ),
+            // Container(
+            //   child: ListView.builder(itemBuilder: )
+            // ),
           ],
         ),
       ),
