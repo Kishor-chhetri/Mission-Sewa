@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:mission_app/Screens/event_screen.dart';
 import 'package:mission_app/components/rounded_button.dart';
+import 'package:mission_app/components/sign_in.dart';
+import 'event_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -67,7 +69,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             title: 'Sign In With Google',
             colour: Color(0xffeb1555),
             onPressed: () {
-              Navigator.pushNamed(context, EventScreen.id);
+              signInWithGoogle().then((result) {
+                if (result != null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return EventScreen();
+                      },
+                    ),
+                  );
+                }
+              });
             },
           ),
           SizedBox(
@@ -79,7 +91,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             style: TextStyle(
               color: Colors.white54,
             ),
-          )
+          ),
         ],
       ),
     ));
