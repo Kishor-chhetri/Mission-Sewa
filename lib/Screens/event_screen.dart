@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/welcome_screen.dart';
 import 'package:mission_app/components/sign_in.dart';
@@ -8,64 +9,108 @@ class EventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.black54,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                  imageUrl,
-                ),
-                radius: 60,
-                backgroundColor: Colors.transparent,
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black54,
               ),
-              SizedBox(height: 40),
-              Text(
-                'NAME',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+              height: 170.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          imageUrl,
+                        ),
+                        radius: 55,
+                        backgroundColor: Color(0xffeb1555),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        email,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      RoundedButton(
+                        colour: Color(0xffeb1555),
+                        title: 'Sign Out',
+                        onPressed: () {
+                          signOutGoogle();
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) {
+                            return WelcomeScreen();
+                          }), ModalRoute.withName('/'));
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Text(
-                name,
-                style: TextStyle(
-                    fontSize: 25,
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              padding: EdgeInsets.all(10),
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.black54,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Icon(
+                    Icons.event,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'EMAIL',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54),
-              ),
-              Text(
-                email,
-                style: TextStyle(
-                    fontSize: 25,
+                    size: 24,
+                    semanticLabel: 'All Events',
+                  ),
+                  Icon(
+                    Icons.near_me,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                    size: 24,
+                    semanticLabel: 'All Events',
+                  ),
+                  Icon(
+                    Icons.check_box,
+                    color: Colors.white,
+                    size: 24,
+                    semanticLabel: 'All Events',
+                  ),
+                  Icon(
+                    Icons.perm_contact_calendar,
+                    color: Colors.white,
+                    size: 24,
+                    semanticLabel: 'All Events',
+                  ),
+                ],
               ),
-              SizedBox(height: 40),
-              RoundedButton(
-                title: 'Sign Out',
-                onPressed: () {
-                  signOutGoogle();
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) {
-                    return WelcomeScreen();
-                  }), ModalRoute.withName('/'));
-                },
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
