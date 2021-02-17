@@ -74,6 +74,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               title: 'Sign In With Google',
               colour: Color(0xffeb1555),
               onPressed: () {
+                setState(() {
+                  showSpinner = true;
+                });
                 signInWithGoogle().then((result) {
                   if (result != null) {
                     Navigator.of(context).push(
@@ -84,6 +87,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                     );
                   }
+                });
+                setState(() {
+                  showSpinner = false;
                 });
               },
             ),
