@@ -1,19 +1,43 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mission_app/Screens/welcome_screen.dart';
 import 'package:mission_app/components/sign_in.dart';
 import 'package:mission_app/components/rounded_button.dart';
 import 'package:mission_app/components/add_events.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class EventScreen extends StatelessWidget {
+class EventScreen extends StatefulWidget {
   static const String id = 'event_screen';
+
+  @override
+  _EventScreenState createState() => _EventScreenState();
+}
+
+class _EventScreenState extends State<EventScreen> {
+  final _firestore = FirebaseFirestore.instance;
+
+  // void getEvents() async {
+  //   final events = await _firestore.collection('events').get();
+  //   for (var event in events.docs) {
+  //     print(event.data());
+  //   }
+  // }
+
+  void eventsStream() async {
+    await for (var snapshot in _firestore.collection('events').snapshots()) {
+      for (var event in snapshot.docs) {
+        print(event.data());
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            showModalBottomSheet(context: context, builder: (context) => TaskScreen());
+          onPressed: () {
+            showModalBottomSheet(
+                context: context, builder: (context) => TaskScreen());
           },
           backgroundColor: Color(0xffeb1555),
           child: Icon(
@@ -70,11 +94,13 @@ class EventScreen extends StatelessWidget {
                         colour: Color(0xffeb1555),
                         title: 'Sign Out',
                         onPressed: () {
-                          signOutGoogle();
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) {
-                            return WelcomeScreen();
-                          }), ModalRoute.withName('/'));
+                          eventsStream();
+
+                          // signOutGoogle();
+                          // Navigator.of(context).pushAndRemoveUntil(
+                          //     MaterialPageRoute(builder: (context) {
+                          //   return WelcomeScreen();
+                          // }), ModalRoute.withName('/'));
                         },
                       ),
                     ],
@@ -120,9 +146,41 @@ class EventScreen extends StatelessWidget {
                 ],
               ),
             ),
-            // Container(
-            //   child: ListView.builder(itemBuilder: )
-            // ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  StreamBuilder<QuerySnapshot>(
+                    stream: _firestore.collection('events').snapshots(),
+                    // ignore: missing_return
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {}
+                      final events = snapshot.data.docs;
+                      List<Text> eventWidgets = [];
+                      for (var event in events) {
+                        final eventTitle = event.data()['title'];
+                        final eventDescription = event.data()['description'];
+                        final eventLocation = event.data()['event_location'];
+                        final eventDate = event.data()['event_date'];
+                        final eventId = event.data()['event_id'];
+                        final publisherId = event.data()['publisher_id'];
+
+                        final eventWidget = Text(
+                            '$eventTitle by $publisherId about $eventDescription in $eventLocation on $eventDate of $eventId');
+                        eventWidgets.add(eventWidget);
+                      }
+                      return Column(
+                        children: eventWidgets,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

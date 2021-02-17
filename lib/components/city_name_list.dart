@@ -1,0 +1,18 @@
+const List<String> cityList = [
+  'Kathmandu',
+  'Bhaktapur',
+  'Lalitpur',
+  'Pokhara',
+  'Lumbini',
+  'Janakpur',
+  'Itahari',
+  'Biratnagar',
+  'Birgunj',
+  'Dharan',
+  'Chitwan',
+  'Hetauda',
+  'Dhulikhel',
+  'Banepa',
+  'Baglung',
+  'Tansen',
+];
