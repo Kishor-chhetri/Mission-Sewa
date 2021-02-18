@@ -142,6 +142,7 @@ class _EventScreenState extends State<EventScreen> {
               height: 15,
             ),
             Expanded(
+              flex: 2,
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.black54,
@@ -170,7 +171,7 @@ class _EventScreenState extends State<EventScreen> {
                           final eventDescription = event.data()['description'];
                           final eventLocation = event.data()['event_location'];
                           final eventDate = event.data()['event_date'];
-                          final eventId = event.data()['event_id'];
+                          // final eventId = event.data()['event_id'];
                           final publisherId = event.data()['publisher_id'];
 
                           final eventWidget = EventCard(
@@ -228,12 +229,23 @@ class EventCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            '$title',
-            style: TextStyle(
-              fontSize: 25,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '$title',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              FlatButton(
+                child: Icon(
+                  Icons.more_vert,
+                ),
+              ),
+            ],
           ),
           SizedBox(
             height: 5,
