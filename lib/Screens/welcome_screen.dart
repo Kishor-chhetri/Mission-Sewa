@@ -17,6 +17,13 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   bool showSpinner = false;
 
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,12 +80,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             RoundedButton(
               title: 'Sign In With Google',
               colour: Color(0xffeb1555),
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   showSpinner = true;
                 });
-                signInWithGoogle().then((result) {
-                  if (result != null) {
+                try {
+                  await signInWithGoogle().then((result) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
@@ -86,11 +93,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         },
                       ),
                     );
-                  }
-                });
-                setState(() {
-                  showSpinner = false;
-                });
+                  });
+                  setState(() {
+                    showSpinner = false;
+                  });
+                } catch (e) {
+                  print(e);
+                }
               },
             ),
             SizedBox(

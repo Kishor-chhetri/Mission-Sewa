@@ -25,11 +25,17 @@ class _TaskScreenState extends State<TaskScreen> {
 
   String eventTitle;
 
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+
   String eventDescription;
 
   int eventId = 0;
 
   String publisherId = email;
+
+  String _selectedTime() {
+    return "${selectedTime.hour}:${selectedTime.minute}";
+  }
 
   void getCurrentUser() {
     try {
@@ -64,12 +70,25 @@ class _TaskScreenState extends State<TaskScreen> {
       });
   }
 
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    // ignore: unrelated_type_equality_checks
+    if (picked != null && picked != eventDate)
+      setState(() {
+        selectedTime = picked;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black54,
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         decoration: BoxDecoration(
           color: Colors.black54,
           borderRadius: BorderRadius.only(
@@ -79,76 +98,83 @@ class _TaskScreenState extends State<TaskScreen> {
         ),
         child: ListView(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Create New Event',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextFieldWidget(
-                  hintText: 'Title',
-                  maxLine: 1,
-                  onChange: (value) {
-                    eventTitle = value;
-                  },
-                ),
-                TextFieldWidget(
-                  hintText: 'Description',
-                  keyType: TextInputType.multiline,
-                  maxLine: 5,
-                  onChange: (value) {
-                    eventDescription = value;
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    RoundedButton(
-                      onPressed: () => selectDate(context),
-                      title: 'Select Event Date',
-                    ),
-                    Text("${eventDate.toLocal()}".split(' ')[0]),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text('Select City'),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    DropdownButton<String>(
-                        value: selectedCity,
-                        items: getDropdownItems(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedCity = value;
-                          });
-                        }),
-                  ],
-                ),
+            Text(
+              'Create New Event',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextFieldWidget(
+              hintText: 'Title',
+              maxLine: 1,
+              onChange: (value) {
+                eventTitle = value;
+              },
+            ),
+            TextFieldWidget(
+              hintText: 'Description',
+              keyType: TextInputType.multiline,
+              maxLine: 5,
+              onChange: (value) {
+                eventDescription = value;
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
                 RoundedButton(
-                  colour: Color(0xffeb1555),
-                  title: 'Create Event',
-                  onPressed: () {
-                    _firestore.collection('events').add({
-                      'title': eventTitle,
-                      'description': eventDescription,
-                      'event_date': eventDate,
-                      'publisher_id': publisherId,
-                      'event_id': eventId,
-                      'event_location': selectedCity,
-                    });
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => selectDate(context),
+                  title: 'Select Event Date',
                 ),
+                Text("${eventDate.toLocal()}".split(' ')[0]),
               ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                RoundedButton(
+                  onPressed: () => selectTime(context),
+                  title: 'Select Event Time',
+                ),
+                Text("${selectedTime.hour}:${selectedTime.minute}"
+                    .split(' ')[0]),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text('Select City'),
+                SizedBox(
+                  width: 15,
+                ),
+                DropdownButton<String>(
+                    value: selectedCity,
+                    items: getDropdownItems(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCity = value;
+                      });
+                    }),
+              ],
+            ),
+            RoundedButton(
+              colour: Color(0xffeb1555),
+              title: 'Create Event',
+              onPressed: () {
+                _firestore.collection('events').add({
+                  'title': eventTitle,
+                  'description': eventDescription,
+                  'event_date': eventDate,
+                  'event_time': _selectedTime(),
+                  'publisher_id': publisherId,
+                  'event_id': eventId,
+                  'event_location': selectedCity,
+                });
+                Navigator.pop(context);
+              },
             ),
           ],
         ),
