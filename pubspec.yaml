@@ -19,6 +19,8 @@ dependencies:
   firebase_auth: ^0.20.0+1
   google_sign_in: ^4.5.9
   shared_preferences: ^0.5.12+4
+  pdf: ^2.0.0
+  printing: ^4.0.0
 
 
 dev_dependencies:

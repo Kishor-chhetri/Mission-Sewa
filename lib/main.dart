@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/all_events.dart';
 import 'package:mission_app/Screens/event_screen.dart';
+import 'package:mission_app/Screens/new_screen.dart';
 import 'package:mission_app/Screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mission_app/components/add_events.dart';
@@ -15,6 +17,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,6 +34,7 @@ class MyApp extends StatelessWidget {
         NearbyEvents.id: (context) => NearbyEvents(),
         InterestedEvents.id: (context) => InterestedEvents(),
         AllEvents.id: (context) => AllEvents(),
+        NewScreen.id: (context) => NewScreen(),
       },
     );
   }

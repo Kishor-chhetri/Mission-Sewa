@@ -19,9 +19,17 @@ class TaskScreen extends StatefulWidget {
 class _TaskScreenState extends State<TaskScreen> {
   final _firestore = FirebaseFirestore.instance;
 
+  final _text = TextEditingController();
+
+  bool _validate = false;
+
   DateTime eventDate = DateTime.now();
 
   String selectedCity = 'Kathmandu';
+
+  String eventCity;
+
+  String eventStreet;
 
   String eventTitle;
 
@@ -122,6 +130,23 @@ class _TaskScreenState extends State<TaskScreen> {
                 eventDescription = value;
               },
             ),
+            TextFieldWidget(
+              hintText: 'City Name',
+              keyType: TextInputType.multiline,
+              maxLine: 1,
+              onChange: (value) {
+                eventCity = value;
+              },
+            ),
+            TextFieldWidget(
+              hintText: 'Street Name',
+              keyType: TextInputType.multiline,
+              maxLine: 1,
+              onChange: (value) {
+                eventStreet = value;
+              },
+            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
@@ -143,37 +168,66 @@ class _TaskScreenState extends State<TaskScreen> {
                     .split(' ')[0]),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('Select City'),
-                SizedBox(
-                  width: 15,
-                ),
-                DropdownButton<String>(
-                    value: selectedCity,
-                    items: getDropdownItems(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCity = value;
-                      });
-                    }),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //   children: [
+            //     Text('Select City'),
+            //     SizedBox(
+            //       width: 15,
+            //     ),
+            //     DropdownButton<String>(
+            //         value: selectedCity,
+            //         items: getDropdownItems(),
+            //         onChanged: (value) {
+            //           setState(() {
+            //             selectedCity = value;
+            //           });
+            //         }),
+            //   ],
+            // ),
             RoundedButton(
               colour: Color(0xffeb1555),
               title: 'Create Event',
               onPressed: () {
-                _firestore.collection('events').add({
-                  'title': eventTitle,
-                  'description': eventDescription,
-                  'event_date': eventDate,
-                  'event_time': _selectedTime(),
-                  'publisher_id': publisherId,
-                  'event_id': eventId,
-                  'event_location': selectedCity,
-                });
-                Navigator.pop(context);
+                if (eventTitle != null &&
+                    eventDescription != null &&
+                    eventDate != null &&
+                    selectedCity != null) {
+                  _firestore.collection('events').add({
+                    'title': eventTitle,
+                    'description': eventDescription,
+                    'event_date': eventDate,
+                    'city_name': eventCity,
+                    'street_name': eventStreet,
+                    'event_time': _selectedTime(),
+                    'publisher_id': publisherId,
+                    'event_id': eventId,
+                    'event_location': eventCity,
+                  });
+                  Navigator.pop(context);
+                } else {
+                  showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) {
+                        return Center(
+                          child: Container(
+                            height: 200,
+                            child: AlertDialog(
+                              title: Text("Fill up the empty fields."),
+                              actions: [
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Okay")),
+                              ],
+                              elevation: 24.0,
+                            ),
+                          ),
+                        );
+                      });
+                }
               },
             ),
           ],

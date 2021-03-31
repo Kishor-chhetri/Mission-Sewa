@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mission_app/Screens/all_events.dart';
+import 'package:mission_app/Screens/nearby_events.dart';
 import 'package:mission_app/Screens/interested_events.dart';
 import 'package:mission_app/Screens/my_events_screen.dart';
 import 'package:mission_app/components/sign_in.dart';
@@ -162,7 +162,7 @@ class _EventScreenState extends State<EventScreen>
                 child: TabBarView(
                   children: [
                     EventContainer(firestore: _firestore),
-                    AllEvents(),
+                    NearbyEvents(),
                     MyEvents(),
                     InterestedEvents(),
                   ],

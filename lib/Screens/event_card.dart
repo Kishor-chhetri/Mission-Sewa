@@ -77,10 +77,6 @@ class _EventCardState extends State<EventCard> {
                                     ],
                                   ))
                                 ])
-                        // IconButton(
-                        //         icon: Icon(Icons.more_vert),
-                        //         onPressed: () {},
-                        //       )
                         : RaisedButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
