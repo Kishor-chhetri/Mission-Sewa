@@ -71,10 +71,10 @@ class _EventContainerState extends State<EventContainer> {
                 print(((event.data()["interested"]).length));
                 final eventWidget = EventCard(
                     btnName: "Join",
-                    btnFun: () async {
-                      if ((int.parse(event.data()["volunteer_number"])) <
+                    btnFun: () {
+                      if ((int.parse(event.data()["volunteer_number"])) >
                           ((event.data()["interested"]).length)) {
-                        await FirebaseFirestore.instance
+                        FirebaseFirestore.instance
                             .collection("events")
                             .doc("${event.id}")
                             .update({
