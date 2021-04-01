@@ -140,16 +140,16 @@ class _EventScreenState extends State<EventScreen>
                     semanticLabel: 'Near Me',
                   ),
                   Icon(
-                    Icons.check_box,
-                    color: Colors.white,
-                    size: 24,
-                    semanticLabel: 'Attending',
-                  ),
-                  Icon(
                     Icons.perm_contact_calendar,
                     color: Colors.white,
                     size: 24,
                     semanticLabel: 'My Events',
+                  ),
+                  Icon(
+                    Icons.check_box,
+                    color: Colors.white,
+                    size: 24,
+                    semanticLabel: 'Interested Events',
                   ),
                 ],
               ),
