@@ -39,6 +39,16 @@ class _MyEventsState extends State<MyEvents> {
               final docId = event.id;
               final publisherId = event.data()['publisher_id'];
               final eventWidget = EventCard(
+                  btnName: "Nth",
+                  btnFun: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return NewScreen(docId: docId);
+                        },
+                      ),
+                    );
+                  },
                   onPress: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

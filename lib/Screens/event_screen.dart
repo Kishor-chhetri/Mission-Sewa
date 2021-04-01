@@ -164,7 +164,9 @@ class _EventScreenState extends State<EventScreen>
                     EventContainer(firestore: _firestore),
                     NearbyEvents(),
                     MyEvents(),
-                    InterestedEvents(),
+                    InterestedEvents(
+                      firestore: _firestore,
+                    ),
                   ],
                   controller: _tabController,
                 ))
