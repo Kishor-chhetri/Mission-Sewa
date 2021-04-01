@@ -47,7 +47,7 @@ class _EventCardState extends State<EventCard> {
           borderRadius: BorderRadius.all(
             Radius.circular(20),
           ),
-          color: email == widget.publisher ? Colors.black54 : Colors.blue,
+          color: email == widget.publisher ? Colors.black54 : Colors.white12,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

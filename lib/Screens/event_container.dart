@@ -86,8 +86,6 @@ class _EventContainerState extends State<EventContainer> {
                 var date = DateTime.parse(eventDate.toDate().toString());
                 final docId = event.id;
                 final publisherId = event.data()['publisher_id'];
-                print((int.parse(event.data()["volunteer_number"])));
-                print(((event.data()["interested"]).length));
                 final eventWidget = EventCard(
                     btnName: "Join",
                     btnFun: () {
