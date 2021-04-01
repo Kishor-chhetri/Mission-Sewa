@@ -124,7 +124,7 @@ class _EventCardState extends State<EventCard> {
 class flatBtn extends StatelessWidget {
   const flatBtn({
     Key key,
-    @required this.widget,
+    this.widget,
     @required this.btnFun,
     @required this.btnName,
   }) : super(key: key);

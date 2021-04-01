@@ -52,7 +52,7 @@ class _EventContainerState extends State<EventContainer> {
               prefixIcon: Icon(Icons.search),
               hintText: 'Search Events...',
             ),
-            onChanged:(val) {
+            onChanged: (val) {
               setState(() {
                 query = val.toLowerCase();
               });
@@ -61,12 +61,10 @@ class _EventContainerState extends State<EventContainer> {
           StreamBuilder<QuerySnapshot>(
             stream: (query != "" && query != null)
                 ? FirebaseFirestore.instance
-                .collection('events')
-                .where('searchKeywords', arrayContains: query)
-                .snapshots()
-                : FirebaseFirestore.instance
-                .collection('events')
-                .snapshots(),
+                    .collection('events')
+                    .where('searchKeywords', arrayContains: query)
+                    .snapshots()
+                : FirebaseFirestore.instance.collection('events').snapshots(),
             // ignore: missing_return
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (!snapshot.hasData) {
