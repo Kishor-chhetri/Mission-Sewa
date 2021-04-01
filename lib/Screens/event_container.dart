@@ -18,6 +18,7 @@ class EventContainer extends StatefulWidget {
 }
 
 class _EventContainerState extends State<EventContainer> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
