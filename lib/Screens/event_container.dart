@@ -22,6 +22,7 @@ class EventContainer extends StatefulWidget {
 
 class _EventContainerState extends State<EventContainer> {
   DateTime eventDate = DateTime.now();
+  String query = "";
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -46,8 +47,26 @@ class _EventContainerState extends State<EventContainer> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.search),
+              hintText: 'Search Events...',
+            ),
+            onChanged:(val) {
+              setState(() {
+                query = val.toLowerCase();
+              });
+            },
+          ),
           StreamBuilder<QuerySnapshot>(
-            stream: widget._firestore.collection('events').snapshots(),
+            stream: (query != "" && query != null)
+                ? FirebaseFirestore.instance
+                .collection('events')
+                .where('searchKeywords', arrayContains: query)
+                .snapshots()
+                : FirebaseFirestore.instance
+                .collection('events')
+                .snapshots(),
             // ignore: missing_return
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (!snapshot.hasData) {

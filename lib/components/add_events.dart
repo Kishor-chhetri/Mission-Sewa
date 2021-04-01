@@ -61,6 +61,16 @@ class _TaskScreenState extends State<TaskScreen> {
     }
   }
 
+  setSearchParam(String title) {
+    List<String> searchKeys = List();
+    String temp = "";
+    for(int i = 0; i < title.length; i++){
+      temp = temp + title[i].toLowerCase();
+      searchKeys.add(temp);
+    }
+    return searchKeys;
+  }
+
   List<DropdownMenuItem> getDropdownItems() {
     List<DropdownMenuItem<String>> dropdownItems = [];
     for (String city in cityList) {
@@ -218,6 +228,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     'event_location': eventCity,
                     'volunteer_number': volunteerNumber,
                     'interested': [],
+                    'searchKeywords': setSearchParam(eventTitle),
                   });
                   Navigator.pop(context);
                 } else {
