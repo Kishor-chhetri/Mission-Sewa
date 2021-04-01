@@ -107,8 +107,8 @@ class _EventScreenState extends State<EventScreen>
                           signOutGoogle();
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (context) {
-                            return WelcomeScreen();
-                          }), ModalRoute.withName('/'));
+                                return WelcomeScreen();
+                              }), ModalRoute.withName('/'));
                         },
                       ),
                     ],

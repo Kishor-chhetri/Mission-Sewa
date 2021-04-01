@@ -14,6 +14,33 @@
       },
       "oauth_client": [
         {
+<<<<<<< HEAD
+=======
+          "client_id": "331175349598-a9ni7haqdiec6hvl48dmlkbc3enjtucb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chhetrikishor.mission_app",
+            "certificate_hash": "ebe9d98577497b9eac5c140fc7119a9dc5aa29d2"
+          }
+        },
+        {
+          "client_id": "331175349598-hhsl1rsj4v70lmbm5le7n51j7ss8jbb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chhetrikishor.mission_app",
+            "certificate_hash": "f24ec898a3e49052ed4925663367a8761af20faf"
+          }
+        },
+        {
+          "client_id": "331175349598-tclrjdc1e2n2choeelv6blgb18rdqdp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chhetrikishor.mission_app",
+            "certificate_hash": "552ad42100f8afa3998ce2ab6024233e1bb98ccb"
+          }
+        },
+        {
+>>>>>>> 871115285ead0fb02e1962ad44c1cbd96eed9310
           "client_id": "331175349598-q5751lro0sfkdh299iqhfafdmm59itv4.apps.googleusercontent.com",
           "client_type": 3
         }
