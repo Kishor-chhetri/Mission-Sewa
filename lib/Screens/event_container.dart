@@ -1,23 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:mission_app/components/sign_in.dart';
 import 'event_card.dart';
+import 'new_screen.dart';
 
 class EventContainer extends StatefulWidget {
   const EventContainer({
     Key key,
     @required FirebaseFirestore firestore,
+    this.document,
   })  : _firestore = firestore,
         super(key: key);
 
   final FirebaseFirestore _firestore;
+  final String document;
 
   @override
   _EventContainerState createState() => _EventContainerState();
 }
 
 class _EventContainerState extends State<EventContainer> {
+  DateTime eventDate = DateTime.now();
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: eventDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != eventDate)
+      setState(() {
+        eventDate = picked;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +67,43 @@ class _EventContainerState extends State<EventContainer> {
                 var date = DateTime.parse(eventDate.toDate().toString());
                 final docId = event.id;
                 final publisherId = event.data()['publisher_id'];
+                print((int.parse(event.data()["volunteer_number"])));
+                print(((event.data()["interested"]).length));
                 final eventWidget = EventCard(
+                    btnName: "Join",
+                    btnFun: () async {
+                      if ((int.parse(event.data()["volunteer_number"])) <
+                          ((event.data()["interested"]).length)) {
+                        await FirebaseFirestore.instance
+                            .collection("events")
+                            .doc("${event.id}")
+                            .update({
+                          "interested": FieldValue.arrayUnion([email])
+                        });
+                      } else {
+                        showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (context) {
+                              return Center(
+                                child: Container(
+                                  height: 200,
+                                  child: AlertDialog(
+                                    title: Text("Sorry, all seats are filled."),
+                                    actions: [
+                                      FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Okay")),
+                                    ],
+                                    elevation: 24.0,
+                                  ),
+                                ),
+                              );
+                            });
+                      }
+                    },
                     document: docId,
                     title: eventTitle,
                     publisher: publisherId,
@@ -73,3 +125,35 @@ class _EventContainerState extends State<EventContainer> {
     );
   }
 }
+
+//
+// if (int.parse(event.data()["volunteer_number"]) <=
+// ((event.data()["interested"]).length - 1)) {
+// showDialog(
+// barrierDismissible: true,
+// context: context,
+// builder: (context) {
+// return Center(
+// child: Container(
+// height: 200,
+// child: AlertDialog(
+// title: Text("Fill up the empty fields."),
+// actions: [
+// FlatButton(
+// onPressed: () {
+// Navigator.pop(context);
+// },
+// child: Text("Okay")),
+// ],
+// elevation: 24.0,
+// ),
+// ),
+// );
+// });
+// }
+// FirebaseFirestore.instance
+//     .collection("events")
+// .doc("${event.id}")
+// .update({
+// "interested": FieldValue.arrayUnion([email])
+// });

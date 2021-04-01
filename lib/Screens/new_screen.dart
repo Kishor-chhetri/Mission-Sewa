@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:mission_app/components/sign_in.dart';
 
 class NewScreen extends StatefulWidget {
   static const String id = "new_screen";
@@ -65,65 +64,51 @@ class _NewScreenState extends State<NewScreen> {
               return Scaffold(
                 body: SafeArea(
                   child: Container(
-                    child: Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Column(children: [
-                          RepaintBoundary(
-                            key: _printKey,
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Interested People",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      decoration: TextDecoration.none,
-                                      color: Colors.white54),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: interestedPeople.length,
-                                    itemBuilder: (builder, index) {
-                                      return Center(
-                                          child: Card(
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              child: CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                  imageUrl,
-                                                ),
-                                                radius: 55,
-                                                backgroundColor:
-                                                    Color(0xffeb1555),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: Text(name),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.all(15),
-                                              height: 50,
-                                              width: double.infinity,
-                                              child: Text(
-                                                interestedPeople[index]
-                                                    .toString(),
-                                                style: TextStyle(fontSize: 15),
-                                              ),
-                                            ),
-                                          ],
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: ListView(shrinkWrap: true, children: [
+                        RepaintBoundary(
+                          key: _printKey,
+                          child: Container(
+                              child: Column(
+                            children: [
+                              Text(
+                                "Interested People",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    decoration: TextDecoration.none,
+                                    color: Colors.white54),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: interestedPeople.length,
+                                  itemBuilder: (builder, index) {
+                                    return Center(
+                                        child: Card(
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 17, horizontal: 15),
+                                        height: 50,
+                                        width: double.infinity,
+                                        child: Text(
+                                          interestedPeople[index].toString(),
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
                                         ),
-                                      ));
-                                    }),
-                              ],
-                            ),
-                          ),
-                        ]),
-                      ),
+                                      ),
+                                    ));
+                                  }),
+                            ],
+                          )),
+                        ),
+                      ]),
                     ),
                   ),
                 ),

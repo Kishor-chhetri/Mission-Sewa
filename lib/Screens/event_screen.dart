@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/nearby_events.dart';
-import 'package:mission_app/Screens/search_events.dart';
 import 'package:mission_app/Screens/interested_events.dart';
 import 'package:mission_app/Screens/my_events_screen.dart';
 import 'package:mission_app/components/sign_in.dart';
@@ -27,7 +26,7 @@ class _EventScreenState extends State<EventScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   void eventsStream() async {
@@ -108,8 +107,8 @@ class _EventScreenState extends State<EventScreen>
                           signOutGoogle();
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (context) {
-                            return WelcomeScreen();
-                          }), ModalRoute.withName('/'));
+                                return WelcomeScreen();
+                              }), ModalRoute.withName('/'));
                         },
                       ),
                     ],
@@ -152,12 +151,6 @@ class _EventScreenState extends State<EventScreen>
                     size: 24,
                     semanticLabel: 'My Events',
                   ),
-                  Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: 24,
-                    semanticLabel: 'Search Events',
-                  ),
                 ],
               ),
             ),
@@ -171,8 +164,9 @@ class _EventScreenState extends State<EventScreen>
                     EventContainer(firestore: _firestore),
                     NearbyEvents(),
                     MyEvents(),
-                    InterestedEvents(),
-                    SearchEvents(),
+                    InterestedEvents(
+                      firestore: _firestore,
+                    ),
                   ],
                   controller: _tabController,
                 ))

@@ -13,8 +13,13 @@ class EventCard extends StatefulWidget {
   final String time;
   final String document;
   final Function onPress;
+  final String btnName;
+  final Function btnFun;
+
   EventCard(
       {this.onPress,
+      @required this.btnName,
+      @required this.btnFun,
       @required this.title,
       @required this.publisher,
       @required this.date,
@@ -51,46 +56,19 @@ class _EventCardState extends State<EventCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${widget.title}',
-                  style: TextStyle(
-                    fontSize: 25,
+                Expanded(
+                  child: Text(
+                    '${widget.title}',
+                    style: TextStyle(
+                      fontSize: 25,
+                    ),
                   ),
                 ),
-                FlatButton(
-                    child: email == widget.publisher
-                        ? PopupMenuButton(
-                            child: Icon(Icons.more_vert),
-                            itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                      child: Row(
-                                    children: [
-                                      Icon(Icons.edit),
-                                      Text("Edit"),
-                                    ],
-                                  )),
-                                  PopupMenuItem(
-                                      child: Row(
-                                    children: [
-                                      Icon(Icons.delete),
-                                      Text("Delete"),
-                                    ],
-                                  ))
-                                ])
-                        : RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            color: Color(0xffeb1555),
-                            onPressed: () {
-                              FirebaseFirestore.instance
-                                  .collection("events")
-                                  .doc("${widget.document}")
-                                  .update({
-                                "interested": FieldValue.arrayUnion([email])
-                              });
-                            },
-                            child: Text("Interested"),
-                          )),
+                flatBtn(
+                  widget: widget,
+                  btnName: widget.btnName,
+                  btnFun: widget.btnFun,
+                ),
               ],
             ),
             SizedBox(
@@ -142,3 +120,56 @@ class _EventCardState extends State<EventCard> {
     );
   }
 }
+
+class flatBtn extends StatelessWidget {
+  const flatBtn({
+    Key key,
+    @required this.widget,
+    @required this.btnFun,
+    @required this.btnName,
+  }) : super(key: key);
+
+  final EventCard widget;
+  final Function btnFun;
+  final String btnName;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+        child: email == widget.publisher
+            ? PopupMenuButton(
+                child: Icon(Icons.more_vert),
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          Icon(Icons.edit),
+                          Text("Edit"),
+                        ],
+                      )),
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          Icon(Icons.delete),
+                          Text("Delete"),
+                        ],
+                      ))
+                    ])
+            : RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                color: Color(0xffeb1555),
+                onPressed: btnFun,
+                child: Text(btnName),
+              ));
+  }
+}
+
+// () {
+// FirebaseFirestore.instance
+//     .collection("events")
+//     .doc("${widget.document}")
+//     .update({
+// "interested": FieldValue.arrayUnion([email])
+// });
+// },

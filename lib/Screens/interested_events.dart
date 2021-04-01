@@ -6,6 +6,15 @@ import 'event_card.dart';
 
 class InterestedEvents extends StatefulWidget {
   static const String id = "interested_events";
+  const InterestedEvents({
+    Key key,
+    @required FirebaseFirestore firestore,
+    this.document,
+  })  : _firestore = firestore,
+        super(key: key);
+
+  final FirebaseFirestore _firestore;
+  final String document;
 
   @override
   _InterestedEventsState createState() => _InterestedEventsState();
@@ -43,6 +52,15 @@ class _InterestedEventsState extends State<InterestedEvents> {
                 final docId = event.id;
                 final publisherId = event.data()['publisher_id'];
                 final eventWidget = EventCard(
+                    btnName: "Cancel",
+                    btnFun: () {
+                      FirebaseFirestore.instance
+                          .collection("events")
+                          .doc("${event.id}")
+                          .update({
+                        "interested": FieldValue.arrayRemove([email])
+                      });
+                    },
                     document: docId,
                     title: eventTitle,
                     publisher: publisherId,

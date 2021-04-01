@@ -31,7 +31,11 @@ class _TaskScreenState extends State<TaskScreen> {
 
   String eventStreet;
 
+  int interested = 0;
+
   String eventTitle;
+
+  String volunteerNumber;
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
 
@@ -147,6 +151,15 @@ class _TaskScreenState extends State<TaskScreen> {
               },
             ),
 
+            TextFieldWidget(
+              hintText: 'Number of Volunteers',
+              keyType: TextInputType.number,
+              maxLine: 1,
+              onChange: (value) {
+                volunteerNumber = value;
+              },
+            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
@@ -203,6 +216,8 @@ class _TaskScreenState extends State<TaskScreen> {
                     'publisher_id': publisherId,
                     'event_id': eventId,
                     'event_location': eventCity,
+                    'volunteer_number': volunteerNumber,
+                    'interested': [],
                   });
                   Navigator.pop(context);
                 } else {
