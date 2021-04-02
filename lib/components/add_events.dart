@@ -65,8 +65,13 @@ class _TaskScreenState extends State<TaskScreen> {
     List<String> searchKeys = List();
     String temp = "";
     for(int i = 0; i < title.length; i++){
-      temp = temp + title[i].toLowerCase();
-      searchKeys.add(temp);
+      temp = "";
+      for(int j=i; j<title.length; j++){
+        temp = temp + title[j].toLowerCase();
+        if(temp != " "){
+          searchKeys.add(temp);
+        }
+      }
     }
     return searchKeys;
   }
