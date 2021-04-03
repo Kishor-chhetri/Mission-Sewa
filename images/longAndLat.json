@@ -1,0 +1,38 @@
+{
+  "Koteshwor": {
+    "Long": 85.34592,
+    "Lat": 27.67555
+  },
+  "Tinkune": {
+    "Long": 85.34180,
+    "Lat": 27.68174
+  },
+  "Baneshwor": {
+    "Long": 85.33400,
+    "Lat": 27.68824
+  },
+  "Tripureshwor": {
+    "Long": 85.313317,
+    "Lat": 27.694132
+  },
+  "Gausala": {
+    "Long": 79.03333,
+    "Lat": 29.313317
+  },
+  "Maharajgunj": {
+    "Long": 85.32829,
+    "Lat": 27.73148
+  },
+  "Kalanki": {
+    "Long": 85.28464,
+    "Lat": 27.69065
+  },
+  "Pokhara": {
+    "Long": 83.9856,
+    "Lat": 28.2096
+  },
+  "Dhankuta": {
+    "Long": 87.3215,
+    "Lat": 26.9835
+  }
+}

@@ -69,8 +69,7 @@ class _NewScreenState extends State<NewScreen> {
                       child: ListView(shrinkWrap: true, children: [
                         RepaintBoundary(
                           key: _printKey,
-                          child: Container(
-                              child: Column(
+                          child: Column(
                             children: [
                               Text(
                                 "Interested People",
@@ -106,7 +105,7 @@ class _NewScreenState extends State<NewScreen> {
                                     ));
                                   }),
                             ],
-                          )),
+                          ),
                         ),
                       ]),
                     ),

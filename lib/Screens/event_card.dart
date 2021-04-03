@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mission_app/components/add_events.dart';
 import 'package:mission_app/components/sign_in.dart';
+import 'package:mission_app/modules/mission_operation.dart';
 
 class EventCard extends StatefulWidget {
   final String title;
@@ -68,6 +69,11 @@ class _EventCardState extends State<EventCard> {
                   widget: widget,
                   btnName: widget.btnName,
                   btnFun: widget.btnFun,
+                  title: widget.title,
+                  description: widget.description,
+                  cityName: widget.location,
+                  noOfVolunters: widget.document,
+                  document: widget.document,
                 ),
               ],
             ),
@@ -127,38 +133,73 @@ class flatBtn extends StatelessWidget {
     this.widget,
     @required this.btnFun,
     @required this.btnName,
+    @required this.noOfVolunters,
+    @required this.title,
+    @required this.description,
+    @required this.cityName,
+    @required this.streetName,
+    @required this.document,
   }) : super(key: key);
 
   final EventCard widget;
   final Function btnFun;
   final String btnName;
+  final String title;
+  final String description;
+  final String cityName;
+  final String streetName;
+  final String noOfVolunters;
+  final String document;
 
   @override
   Widget build(BuildContext context) {
+    MissionOperation missionOperation = new MissionOperation();
     return FlatButton(
         child: email == widget.publisher
             ? PopupMenuButton(
+                onSelected: (value) {
+                  if (value == "Edit") {
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: false,
+                        builder: (context) => TaskScreen(
+                              title: title,
+                              description: description,
+                              cityName: cityName,
+                              noOfVolunters: noOfVolunters,
+                              streetName: "Koteshwor",
+                            ));
+                  } else {
+                    missionOperation.deleteEvent(document);
+                  }
+                },
+                onCanceled: () {
+                  print('cancelled!');
+                },
                 child: Icon(Icons.more_vert),
                 itemBuilder: (context) => [
                       PopupMenuItem(
+                          value: "Edit",
                           child: Row(
-                        children: [
-                          Icon(Icons.edit),
-                          Text("Edit"),
-                        ],
-                      )),
+                            children: [
+                              Icon(Icons.edit),
+                              Text("Edit"),
+                            ],
+                          )),
                       PopupMenuItem(
+                          value: "Delete",
                           child: Row(
-                        children: [
-                          Icon(Icons.delete),
-                          Text("Delete"),
-                        ],
-                      ))
+                            children: [
+                              Icon(Icons.delete),
+                              Text("Delete"),
+                            ],
+                          ))
                     ])
             : RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                color: Color(0xffeb1555),
+                color:
+                    widget.btnName == "Join" ? Color(0xffeb1555) : Colors.grey,
                 onPressed: btnFun,
                 child: Text(btnName),
               ));

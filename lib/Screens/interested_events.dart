@@ -71,11 +71,9 @@ class _InterestedEventsState extends State<InterestedEvents> {
                 eventWidgets.add(eventWidget);
               }
             }
-            return Expanded(
-              child: ListView(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  children: eventWidgets),
-            );
+            return ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                children: eventWidgets);
           }),
     );
   }

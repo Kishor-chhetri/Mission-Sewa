@@ -5,13 +5,25 @@ import 'package:mission_app/components/city_name_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 
 final _auth = FirebaseAuth.instance;
 User loggedInUser;
 
 class TaskScreen extends StatefulWidget {
   static const String id = "add_events";
+  final String title;
+  final String description;
+  final String cityName;
+  final String streetName;
+  final String noOfVolunters;
 
+  TaskScreen(
+      {this.title,
+      this.description,
+      this.cityName,
+      this.streetName,
+      this.noOfVolunters});
   @override
   _TaskScreenState createState() => _TaskScreenState();
 }
@@ -49,6 +61,12 @@ class _TaskScreenState extends State<TaskScreen> {
     return "${selectedTime.hour}:${selectedTime.minute}";
   }
 
+  void getLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+    print(position);
+  }
+
   void getCurrentUser() {
     try {
       final user = _auth.currentUser;
@@ -64,11 +82,11 @@ class _TaskScreenState extends State<TaskScreen> {
   setSearchParam(String title) {
     List<String> searchKeys = List();
     String temp = "";
-    for(int i = 0; i < title.length; i++){
+    for (int i = 0; i < title.length; i++) {
       temp = "";
-      for(int j=i; j<title.length; j++){
+      for (int j = i; j < title.length; j++) {
         temp = temp + title[j].toLowerCase();
-        if(temp != " "){
+        if (temp != " ") {
           searchKeys.add(temp);
         }
       }
@@ -135,14 +153,16 @@ class _TaskScreenState extends State<TaskScreen> {
               ),
             ),
             TextFieldWidget(
-              hintText: 'Title',
+              hintText: widget.title == null ? "Title" : '${widget.title}',
               maxLine: 1,
               onChange: (value) {
                 eventTitle = value;
               },
             ),
             TextFieldWidget(
-              hintText: 'Description',
+              hintText: widget.description == null
+                  ? "Description"
+                  : '${widget.description}',
               keyType: TextInputType.multiline,
               maxLine: 5,
               onChange: (value) {
@@ -150,7 +170,9 @@ class _TaskScreenState extends State<TaskScreen> {
               },
             ),
             TextFieldWidget(
-              hintText: 'City Name',
+              hintText: widget.cityName == null
+                  ? "CityName Name"
+                  : '${widget.cityName}',
               keyType: TextInputType.multiline,
               maxLine: 1,
               onChange: (value) {
@@ -158,7 +180,9 @@ class _TaskScreenState extends State<TaskScreen> {
               },
             ),
             TextFieldWidget(
-              hintText: 'Street Name',
+              hintText: widget.streetName == null
+                  ? "Street Name"
+                  : '${widget.streetName}',
               keyType: TextInputType.multiline,
               maxLine: 1,
               onChange: (value) {
@@ -167,7 +191,9 @@ class _TaskScreenState extends State<TaskScreen> {
             ),
 
             TextFieldWidget(
-              hintText: 'Number of Volunteers',
+              hintText: widget.noOfVolunters == null
+                  ? "No Of Volunters"
+                  : '${widget.noOfVolunters}',
               keyType: TextInputType.number,
               maxLine: 1,
               onChange: (value) {
@@ -217,6 +243,7 @@ class _TaskScreenState extends State<TaskScreen> {
               colour: Color(0xffeb1555),
               title: 'Create Event',
               onPressed: () {
+                getLocation();
                 if (eventTitle != null &&
                     eventDescription != null &&
                     eventDate != null &&
@@ -236,6 +263,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     'searchKeywords': setSearchParam(eventTitle),
                   });
                   Navigator.pop(context);
+                  getLocation();
                 } else {
                   showDialog(
                       barrierDismissible: true,

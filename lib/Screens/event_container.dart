@@ -85,7 +85,9 @@ class _EventContainerState extends State<EventContainer> {
                 final docId = event.id;
                 final publisherId = event.data()['publisher_id'];
                 final eventWidget = EventCard(
-                    btnName: "Join",
+                    btnName: event.data()['interested'].contains(email)
+                        ? 'Joined'
+                        : 'Join',
                     btnFun: () {
                       if ((int.parse(event.data()["volunteer_number"])) >
                           ((event.data()["interested"]).length)) {
