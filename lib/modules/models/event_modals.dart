@@ -1,3 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:mission_app/Screens/event_card.dart';
+import 'package:mission_app/components/add_events.dart';
+import 'package:mission_app/components/sign_in.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../mission_operation.dart';
+
 class EventModel {
   String cityName;
   String description;
@@ -108,3 +116,135 @@ class SearchKeywords {
     return data;
   }
 }
+
+class TextFieldWidget extends StatelessWidget {
+  TextFieldWidget(
+      {@required this.hintText,
+      this.keyType,
+      this.maxLine,
+      @required this.onChange});
+
+  final String hintText;
+  final TextInputType keyType;
+  final int maxLine;
+  final Function onChange;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(4.0),
+      child: TextField(
+        onChanged: onChange,
+        keyboardType: keyType,
+        maxLines: maxLine,
+        autofocus: false,
+        textAlign: TextAlign.left,
+        style: TextStyle(
+          fontSize: 16,
+        ),
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(10),
+          enabled: true,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xffeb1555),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xffeb1555),
+            ),
+          ),
+          hintText: hintText,
+        ),
+        cursorColor: Colors.white,
+      ),
+    );
+  }
+}
+
+class flatBtn extends StatelessWidget {
+  const flatBtn({
+    Key key,
+    this.widget,
+    @required this.btnFun,
+    @required this.btnName,
+    @required this.noOfVolunteers,
+    @required this.title,
+    @required this.description,
+    @required this.cityName,
+    @required this.streetName,
+    @required this.document,
+    @required this.phoneNumber,
+  }) : super(key: key);
+
+  final EventCard widget;
+  final Function btnFun;
+  final String btnName;
+  final String title;
+  final String description;
+  final String cityName;
+  final String streetName;
+  final String noOfVolunteers;
+  final String phoneNumber;
+  final String document;
+
+  @override
+  Widget build(BuildContext context) {
+    MissionOperation missionOperation = new MissionOperation();
+    return FlatButton(
+        child: email == widget.publisher
+            ? PopupMenuButton(
+                onSelected: (value) {
+                  if (value == "Edit") {
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: false,
+                        builder: (context) => TaskScreen(
+                              title: title,
+                              description: description,
+                              cityName: cityName,
+                              noOfVolunters: noOfVolunteers,
+                              streetName: "Koteshwor",
+                            ));
+                  } else {
+                    missionOperation.deleteEvent(document);
+                  }
+                },
+                onCanceled: () {
+                  print('cancelled!');
+                },
+                child: Icon(Icons.more_vert),
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                          value: "Edit",
+                          child: Row(
+                            children: [
+                              Icon(Icons.edit),
+                              Text("Edit"),
+                            ],
+                          )),
+                      PopupMenuItem(
+                          value: "Delete",
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete),
+                              Text("Delete"),
+                            ],
+                          ))
+                    ])
+            : RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                color: widget.btnName == "Join"
+                    ? Color(0xffeb1555)
+                    : widget.btnName == "Finished"
+                        ? Colors.grey
+                        : Colors.blueAccent,
+                onPressed: btnFun,
+                child: Text(btnName),
+              ));
+  }
+}
+
+

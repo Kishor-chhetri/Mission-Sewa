@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'email_send_ui.dart';
 
 class NewScreen extends StatefulWidget {
   static const String id = "new_screen";
@@ -88,17 +90,26 @@ class _NewScreenState extends State<NewScreen> {
                                   itemCount: interestedPeople.length,
                                   itemBuilder: (builder, index) {
                                     return Center(
-                                        child: Card(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 17, horizontal: 15),
-                                        height: 50,
-                                        width: double.infinity,
-                                        child: Text(
-                                          interestedPeople[index].toString(),
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontSize: 15,
+                                        child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return SendEmail();
+                                        }));
+                                      },
+                                      child: Card(
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 17, horizontal: 15),
+                                          height: 50,
+                                          width: double.infinity,
+                                          child: Text(
+                                            interestedPeople[index].toString(),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            ),
                                           ),
                                         ),
                                       ),

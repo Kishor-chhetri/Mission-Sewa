@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mission_app/components/rounded_button.dart';
 import 'package:mission_app/components/city_name_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mission_app/modules/models/event_modals.dart';
 import 'sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geolocator/geolocator.dart';
+
 
 final _auth = FirebaseAuth.instance;
 User loggedInUser;
@@ -17,23 +18,21 @@ class TaskScreen extends StatefulWidget {
   final String cityName;
   final String streetName;
   final String noOfVolunters;
+  final String phoneNumber;
 
   TaskScreen(
       {this.title,
       this.description,
       this.cityName,
       this.streetName,
-      this.noOfVolunters});
+      this.noOfVolunters,
+      this.phoneNumber});
   @override
   _TaskScreenState createState() => _TaskScreenState();
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  final _firestore = FirebaseFirestore.instance;
-
-  final _text = TextEditingController();
-
-  bool _validate = false;
+  final _fireStore = FirebaseFirestore.instance;
 
   DateTime eventDate = DateTime.now();
 
@@ -53,18 +52,16 @@ class _TaskScreenState extends State<TaskScreen> {
 
   String eventDescription;
 
+  String phoneNumber;
+
+  String cityName;
+
   int eventId = 0;
 
   String publisherId = email;
 
   String _selectedTime() {
     return "${selectedTime.hour}:${selectedTime.minute}";
-  }
-
-  void getLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
-    print(position);
   }
 
   void getCurrentUser() {
@@ -170,9 +167,8 @@ class _TaskScreenState extends State<TaskScreen> {
               },
             ),
             TextFieldWidget(
-              hintText: widget.cityName == null
-                  ? "CityName Name"
-                  : '${widget.cityName}',
+              hintText:
+                  widget.cityName == null ? "City Name" : '${widget.cityName}',
               keyType: TextInputType.multiline,
               maxLine: 1,
               onChange: (value) {
@@ -180,19 +176,18 @@ class _TaskScreenState extends State<TaskScreen> {
               },
             ),
             TextFieldWidget(
-              hintText: widget.streetName == null
-                  ? "Street Name"
-                  : '${widget.streetName}',
-              keyType: TextInputType.multiline,
+              hintText: widget.phoneNumber == null
+                  ? "Phone Number"
+                  : '${widget.phoneNumber}',
+              keyType: TextInputType.number,
               maxLine: 1,
               onChange: (value) {
-                eventStreet = value;
+                phoneNumber = value;
               },
             ),
-
             TextFieldWidget(
               hintText: widget.noOfVolunters == null
-                  ? "No Of Volunters"
+                  ? "No Of Volunteers"
                   : '${widget.noOfVolunters}',
               keyType: TextInputType.number,
               maxLine: 1,
@@ -200,7 +195,6 @@ class _TaskScreenState extends State<TaskScreen> {
                 volunteerNumber = value;
               },
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
@@ -222,33 +216,19 @@ class _TaskScreenState extends State<TaskScreen> {
                     .split(' ')[0]),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //   children: [
-            //     Text('Select City'),
-            //     SizedBox(
-            //       width: 15,
-            //     ),
-            //     DropdownButton<String>(
-            //         value: selectedCity,
-            //         items: getDropdownItems(),
-            //         onChanged: (value) {
-            //           setState(() {
-            //             selectedCity = value;
-            //           });
-            //         }),
-            //   ],
-            // ),
             RoundedButton(
               colour: Color(0xffeb1555),
               title: 'Create Event',
               onPressed: () {
-                getLocation();
                 if (eventTitle != null &&
                     eventDescription != null &&
                     eventDate != null &&
-                    selectedCity != null) {
-                  _firestore.collection('events').add({
+                    eventCity != null &&
+                    selectedCity != null &&
+                    phoneNumber != null &&
+                    volunteerNumber != null &&
+                    _selectedTime() != null) {
+                  _fireStore.collection('events').add({
                     'title': eventTitle,
                     'description': eventDescription,
                     'event_date': eventDate,
@@ -261,9 +241,9 @@ class _TaskScreenState extends State<TaskScreen> {
                     'volunteer_number': volunteerNumber,
                     'interested': [],
                     'searchKeywords': setSearchParam(eventTitle),
+                    'phone_number': phoneNumber,
                   });
                   Navigator.pop(context);
-                  getLocation();
                 } else {
                   showDialog(
                       barrierDismissible: true,
@@ -296,48 +276,48 @@ class _TaskScreenState extends State<TaskScreen> {
   }
 }
 
-class TextFieldWidget extends StatelessWidget {
-  TextFieldWidget(
-      {@required this.hintText,
-      this.keyType,
-      this.maxLine,
-      @required this.onChange});
-
-  final String hintText;
-  final TextInputType keyType;
-  final int maxLine;
-  final Function onChange;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(4.0),
-      child: TextField(
-        onChanged: onChange,
-        keyboardType: keyType,
-        maxLines: maxLine,
-        autofocus: false,
-        textAlign: TextAlign.left,
-        style: TextStyle(
-          fontSize: 16,
-        ),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(10),
-          enabled: true,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xffeb1555),
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xffeb1555),
-            ),
-          ),
-          hintText: hintText,
-        ),
-        cursorColor: Colors.white,
-      ),
-    );
-  }
-}
+// class TextFieldWidget extends StatelessWidget {
+//   TextFieldWidget(
+//       {@required this.hintText,
+//       this.keyType,
+//       this.maxLine,
+//       @required this.onChange});
+//
+//   final String hintText;
+//   final TextInputType keyType;
+//   final int maxLine;
+//   final Function onChange;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.all(4.0),
+//       child: TextField(
+//         onChanged: onChange,
+//         keyboardType: keyType,
+//         maxLines: maxLine,
+//         autofocus: false,
+//         textAlign: TextAlign.left,
+//         style: TextStyle(
+//           fontSize: 16,
+//         ),
+//         decoration: InputDecoration(
+//           contentPadding: EdgeInsets.all(10),
+//           enabled: true,
+//           enabledBorder: OutlineInputBorder(
+//             borderSide: BorderSide(
+//               color: Color(0xffeb1555),
+//             ),
+//           ),
+//           focusedBorder: OutlineInputBorder(
+//             borderSide: BorderSide(
+//               color: Color(0xffeb1555),
+//             ),
+//           ),
+//           hintText: hintText,
+//         ),
+//         cursorColor: Colors.white,
+//       ),
+//     );
+//   }
+// }

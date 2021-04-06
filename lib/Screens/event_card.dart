@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mission_app/components/add_events.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:mission_app/components/sign_in.dart';
-import 'package:mission_app/modules/mission_operation.dart';
+import 'package:mission_app/modules/models/event_modals.dart';
 
 class EventCard extends StatefulWidget {
   final String title;
   final String publisher;
   final String location;
   final String description;
+  final String phoneNumber;
   final DateTime date;
   final String time;
   final String document;
@@ -27,7 +28,8 @@ class EventCard extends StatefulWidget {
       @required this.time,
       @required this.location,
       @required this.description,
-      @required this.document});
+      @required this.document,
+      @required this.phoneNumber});
 
   @override
   _EventCardState createState() => _EventCardState();
@@ -38,7 +40,16 @@ class _EventCardState extends State<EventCard> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> _makePhoneCall(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
     final String formatted = formatter.format(widget.date);
+
     return GestureDetector(
       onTap: widget.onPress,
       child: Container(
@@ -65,14 +76,18 @@ class _EventCardState extends State<EventCard> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: 10,
+                ),
                 flatBtn(
                   widget: widget,
                   btnName: widget.btnName,
+                  phoneNumber: widget.phoneNumber,
                   btnFun: widget.btnFun,
                   title: widget.title,
                   description: widget.description,
                   cityName: widget.location,
-                  noOfVolunters: widget.document,
+                  noOfVolunteers: widget.document,
                   document: widget.document,
                 ),
               ],
@@ -101,7 +116,7 @@ class _EventCardState extends State<EventCard> {
                     Text(
                       '$formatted',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -120,97 +135,52 @@ class _EventCardState extends State<EventCard> {
                 wordSpacing: 1.5,
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "For Further Details:",
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontSize: 15,
+                wordSpacing: 1.5,
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Contact Number: ",
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    fontSize: 15,
+                    wordSpacing: 1.5,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print(widget.phoneNumber);
+                    setState(() {
+                      _makePhoneCall('tel: ${widget.phoneNumber}');
+                    });
+                  },
+                  child: Text(
+                    '${widget.phoneNumber}',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 15,
+                      wordSpacing: 1.5,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
     );
   }
 }
-
-class flatBtn extends StatelessWidget {
-  const flatBtn({
-    Key key,
-    this.widget,
-    @required this.btnFun,
-    @required this.btnName,
-    @required this.noOfVolunters,
-    @required this.title,
-    @required this.description,
-    @required this.cityName,
-    @required this.streetName,
-    @required this.document,
-  }) : super(key: key);
-
-  final EventCard widget;
-  final Function btnFun;
-  final String btnName;
-  final String title;
-  final String description;
-  final String cityName;
-  final String streetName;
-  final String noOfVolunters;
-  final String document;
-
-  @override
-  Widget build(BuildContext context) {
-    MissionOperation missionOperation = new MissionOperation();
-    return FlatButton(
-        child: email == widget.publisher
-            ? PopupMenuButton(
-                onSelected: (value) {
-                  if (value == "Edit") {
-                    showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: false,
-                        builder: (context) => TaskScreen(
-                              title: title,
-                              description: description,
-                              cityName: cityName,
-                              noOfVolunters: noOfVolunters,
-                              streetName: "Koteshwor",
-                            ));
-                  } else {
-                    missionOperation.deleteEvent(document);
-                  }
-                },
-                onCanceled: () {
-                  print('cancelled!');
-                },
-                child: Icon(Icons.more_vert),
-                itemBuilder: (context) => [
-                      PopupMenuItem(
-                          value: "Edit",
-                          child: Row(
-                            children: [
-                              Icon(Icons.edit),
-                              Text("Edit"),
-                            ],
-                          )),
-                      PopupMenuItem(
-                          value: "Delete",
-                          child: Row(
-                            children: [
-                              Icon(Icons.delete),
-                              Text("Delete"),
-                            ],
-                          ))
-                    ])
-            : RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                color:
-                    widget.btnName == "Join" ? Color(0xffeb1555) : Colors.grey,
-                onPressed: btnFun,
-                child: Text(btnName),
-              ));
-  }
-}
-
-// () {
-// FirebaseFirestore.instance
-//     .collection("events")
-//     .doc("${widget.document}")
-//     .update({
-// "interested": FieldValue.arrayUnion([email])
-// });
-// },

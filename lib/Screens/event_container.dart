@@ -79,16 +79,57 @@ class _EventContainerState extends State<EventContainer> {
                 final eventTitle = event.data()['title'];
                 final eventDescription = event.data()['description'];
                 final eventLocation = event.data()['event_location'];
-                final eventDate = event.data()['event_date'];
+                final phoneNumber = event.data()['phone_number'];
+                final eventDates = event.data()['event_date'];
                 final eventTime = event.data()['event_time'];
-                var date = DateTime.parse(eventDate.toDate().toString());
+                var date = DateTime.parse(eventDates.toDate().toString());
                 final docId = event.id;
                 final publisherId = event.data()['publisher_id'];
                 final eventWidget = EventCard(
-                    btnName: event.data()['interested'].contains(email)
-                        ? 'Joined'
-                        : 'Join',
+                    btnName:
+                        eventDates.toDate().difference(eventDate).inDays < 1
+                            ? 'Finished'
+                            : event.data()['interested'].contains(email)
+                                ? 'Joined'
+                                : 'Join',
                     btnFun: () {
+                      if (eventDate != null) {
+                        if (eventDates.toDate().difference(eventDate).inDays >
+                            1) {
+                          if ((int.parse(event.data()["volunteer_number"])) >
+                              ((event.data()["interested"]).length)) {
+                            FirebaseFirestore.instance
+                                .collection("events")
+                                .doc("${event.id}")
+                                .update({
+                              "interested": FieldValue.arrayUnion([email])
+                            });
+                          } else {
+                            showDialog(
+                                barrierDismissible: true,
+                                context: context,
+                                builder: (context) {
+                                  return Center(
+                                    child: Container(
+                                      height: 200,
+                                      child: AlertDialog(
+                                        title: Text(
+                                            "Sorry, all seats are filled."),
+                                        actions: [
+                                          FlatButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text("Okay")),
+                                        ],
+                                        elevation: 24.0,
+                                      ),
+                                    ),
+                                  );
+                                });
+                          }
+                        }
+                      }
                       if ((int.parse(event.data()["volunteer_number"])) >
                           ((event.data()["interested"]).length)) {
                         FirebaseFirestore.instance
@@ -124,6 +165,7 @@ class _EventContainerState extends State<EventContainer> {
                     document: docId,
                     title: eventTitle,
                     publisher: publisherId,
+                    phoneNumber: phoneNumber,
                     date: date,
                     time: eventTime,
                     location: eventLocation,

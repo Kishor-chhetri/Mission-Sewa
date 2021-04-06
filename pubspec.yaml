@@ -24,6 +24,8 @@ dependencies:
   geolocator: ^3.0.1
   geocoder: ^0.2.1
   path_provider:
+  url_launcher: ^5.7.10
+  flutter_email_sender:
 
 
 
