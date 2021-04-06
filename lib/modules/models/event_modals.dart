@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/event_card.dart';
 import 'package:mission_app/components/add_events.dart';
 import 'package:mission_app/components/sign_in.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../mission_operation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventModel {
   String cityName;
@@ -173,7 +172,6 @@ class flatBtn extends StatelessWidget {
     @required this.title,
     @required this.description,
     @required this.cityName,
-    @required this.streetName,
     @required this.document,
     @required this.phoneNumber,
   }) : super(key: key);
@@ -184,7 +182,6 @@ class flatBtn extends StatelessWidget {
   final String title;
   final String description;
   final String cityName;
-  final String streetName;
   final String noOfVolunteers;
   final String phoneNumber;
   final String document;
@@ -247,4 +244,10 @@ class flatBtn extends StatelessWidget {
   }
 }
 
-
+Future<void> makePhoneCall(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}

@@ -1,16 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:intl/intl.dart';
 
 import 'package:mission_app/components/sign_in.dart';
-import 'package:path_provider/path_provider.dart';
 
 class NearbyEvents extends StatefulWidget {
   static const String id = "nearby_events";
@@ -97,11 +95,17 @@ class _NearbyEventsState extends State<NearbyEvents> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      snap.data.docs[index]["title"].toString(),
-                                      style: TextStyle(
-                                        fontSize: 20,
+                                    Expanded(
+                                      child: Text(
+                                        snap.data.docs[index]["title"]
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
                                       ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
                                     ),
                                     RaisedButton(
                                         shape: RoundedRectangleBorder(
@@ -238,13 +242,59 @@ class _NearbyEventsState extends State<NearbyEvents> {
                                 height: 15,
                               ),
                               Text(
-                                ' ' '  ${snap.data.docs[index]['description']}',
+                                ' '
+                                '  ${snap.data.docs[index]['description']}',
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(
                                   fontSize: 15,
                                   wordSpacing: 1.5,
                                 ),
                               ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "For Further Details:",
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  wordSpacing: 1.5,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Contact Number: ",
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      wordSpacing: 1.5,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      print(snap.data.docs[index]
+                                          ["phone_number"]);
+                                      setState(() {
+                                        makePhoneCall(
+                                            'tel: ${snap.data.docs[index]["phone_number"]}');
+                                      });
+                                    },
+                                    child: Text(
+                                      '${snap.data.docs[index]["phone_number"]}',
+                                      textAlign: TextAlign.justify,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        wordSpacing: 1.5,
+                                        letterSpacing: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         );

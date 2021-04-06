@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/components/sign_in.dart';
 import 'event_card.dart';
-import 'new_screen.dart';
 
 class EventContainer extends StatefulWidget {
   const EventContainer({

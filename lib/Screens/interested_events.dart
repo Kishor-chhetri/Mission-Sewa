@@ -47,6 +47,7 @@ class _InterestedEventsState extends State<InterestedEvents> {
                 final eventDescription = event.data()['description'];
                 final eventLocation = event.data()['event_location'];
                 final eventDate = event.data()['event_date'];
+                final phoneNumber = event.data()['phone_number'];
                 final eventTime = event.data()['event_time'];
                 var date = DateTime.parse(eventDate.toDate().toString());
                 final docId = event.id;
@@ -66,6 +67,7 @@ class _InterestedEventsState extends State<InterestedEvents> {
                     publisher: publisherId,
                     date: date,
                     time: eventTime,
+                    phoneNumber: phoneNumber,
                     location: eventLocation,
                     description: eventDescription);
                 eventWidgets.add(eventWidget);

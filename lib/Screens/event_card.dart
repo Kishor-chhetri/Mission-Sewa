@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:mission_app/components/sign_in.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 
@@ -40,16 +39,7 @@ class _EventCardState extends State<EventCard> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _makePhoneCall(String url) async {
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch $url';
-      }
-    }
-
     final String formatted = formatter.format(widget.date);
-
     return GestureDetector(
       onTap: widget.onPress,
       child: Container(
@@ -163,7 +153,7 @@ class _EventCardState extends State<EventCard> {
                   onTap: () {
                     print(widget.phoneNumber);
                     setState(() {
-                      _makePhoneCall('tel: ${widget.phoneNumber}');
+                      makePhoneCall('tel: ${widget.phoneNumber}');
                     });
                   },
                   child: Text(

@@ -11,19 +11,6 @@ class _SendEmailState extends State<SendEmail> {
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   Future<void> send() async {
-    Widget build(BuildContext context) {
-      return new StreamBuilder(
-          stream: fireStore.collection('events').snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return new Text("Loading");
-            }
-            final userDocument = snapshot.data.docs;
-
-            return new Text(userDocument["name"]);
-          });
-    }
-
     final _recipientController = TextEditingController(
       text: '',
     );
@@ -39,15 +26,6 @@ class _SendEmailState extends State<SendEmail> {
       subject: _subjectController.text,
       recipients: [_recipientController.text],
     );
-
-    String platformResponse;
-
-    try {
-      await FlutterEmailSender.send(email);
-      platformResponse = 'success';
-    } catch (error) {
-      platformResponse = error.toString();
-    }
     Navigator.pop(context);
   }
 
