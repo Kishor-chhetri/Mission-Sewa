@@ -1,18 +1,9 @@
-const List<String> cityList = [
-  'Kathmandu',
-  'Bhaktapur',
-  'Lalitpur',
-  'Pokhara',
-  'Lumbini',
-  'Janakpur',
-  'Itahari',
-  'Biratnagar',
-  'Birgunj',
-  'Dharan',
-  'Chitwan',
-  'Hetauda',
-  'Dhulikhel',
-  'Banepa',
-  'Baglung',
-  'Tansen',
+const List<String> eventType = [
+  'Blood Donation',
+  'Food Donation',
+  'Clothes Donation',
+  'Cleaning and Management',
+  'Plantation',
+  'Fund Raising',
+  'Other'
 ];

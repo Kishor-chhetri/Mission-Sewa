@@ -7,7 +7,6 @@ import 'package:mission_app/modules/models/event_modals.dart';
 import 'sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 final _auth = FirebaseAuth.instance;
 User loggedInUser;
 
@@ -36,7 +35,7 @@ class _TaskScreenState extends State<TaskScreen> {
 
   DateTime eventDate = DateTime.now();
 
-  String selectedCity = 'Kathmandu';
+  String selectedEventType = 'Other';
 
   String eventCity;
 
@@ -93,7 +92,7 @@ class _TaskScreenState extends State<TaskScreen> {
 
   List<DropdownMenuItem> getDropdownItems() {
     List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String city in cityList) {
+    for (String city in eventType) {
       var newItem = DropdownMenuItem(child: Text(city), value: city);
       dropdownItems.add(newItem);
     }
@@ -127,10 +126,9 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(15),
       color: Colors.black54,
       child: Container(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         decoration: BoxDecoration(
           color: Colors.black54,
           borderRadius: BorderRadius.only(
@@ -197,6 +195,20 @@ class _TaskScreenState extends State<TaskScreen> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("Select Event Type"),
+                DropdownButton<String>(
+                    value: selectedEventType,
+                    items: getDropdownItems(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedEventType = value;
+                      });
+                    }),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 RoundedButton(
                   onPressed: () => selectDate(context),
@@ -224,7 +236,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     eventDescription != null &&
                     eventDate != null &&
                     eventCity != null &&
-                    selectedCity != null &&
+                    selectedEventType != null &&
                     phoneNumber != null &&
                     volunteerNumber != null &&
                     _selectedTime() != null) {
@@ -242,6 +254,8 @@ class _TaskScreenState extends State<TaskScreen> {
                     'interested': [],
                     'searchKeywords': setSearchParam(eventTitle),
                     'phone_number': phoneNumber,
+                    'time_stamp': DateTime.now().microsecondsSinceEpoch,
+                    'event_type': selectedEventType,
                   });
                   Navigator.pop(context);
                 } else {

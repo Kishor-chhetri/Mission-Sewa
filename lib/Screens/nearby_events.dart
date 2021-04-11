@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:intl/intl.dart';
-
 import 'package:mission_app/components/sign_in.dart';
 
 class NearbyEvents extends StatefulWidget {
@@ -25,7 +24,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
   double userLat;
   double userLong;
   double distance;
-  List<double> kms = List<double>();
+  // List<double> kms = List<double>();
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   List<QueryDocumentSnapshot> cityName = List<QueryDocumentSnapshot>();
   double km;
@@ -116,7 +115,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
                                                   .toDate()
                                                   .difference(eventDate)
                                                   .inDays >
-                                              1) {
+                                              0.5) {
                                             if ((int.parse(snap.data.docs[index]
                                                     ["volunteer_number"])) >
                                                 ((snap.data.docs[index]
@@ -206,7 +205,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
                                       Text(
                                         "${snapshot.data == null ? "calculating......" : snapshot.data.toStringAsFixed(2)} km near",
                                         style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 18,
                                             color: Color(0xffeb1555)),
                                       ),
                                     ],
