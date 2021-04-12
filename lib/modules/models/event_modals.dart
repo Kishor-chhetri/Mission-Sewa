@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/event_card.dart';
+import 'package:mission_app/Screens/event_screen.dart';
 import 'package:mission_app/components/add_events.dart';
 import 'package:mission_app/components/sign_in.dart';
 import '../mission_operation.dart';
@@ -190,7 +191,7 @@ class flatBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     MissionOperation missionOperation = new MissionOperation();
     return FlatButton(
-        child: email == widget.publisher
+        child: logUser.email == widget.publisher
             ? PopupMenuButton(
                 onSelected: (value) {
                   if (value == "Edit") {
@@ -249,5 +250,37 @@ Future<void> makePhoneCall(String url) async {
     await launch(url);
   } else {
     throw 'Could not launch $url';
+  }
+}
+
+class FirstScreenButton extends StatelessWidget {
+  final Color color;
+  final Function onPressed;
+  final String title;
+
+  FirstScreenButton(
+      {@required this.color, @required this.onPressed, @required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Material(
+        elevation: 5.0,
+        color: color,
+        borderRadius: BorderRadius.circular(30.0),
+        child: MaterialButton(
+          onPressed: onPressed,
+          minWidth: 200.0,
+          height: 42.0,
+          child: Text(
+            '$title',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

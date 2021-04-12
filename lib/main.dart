@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/event_screen.dart';
+import 'package:mission_app/Screens/login_screen.dart';
 import 'package:mission_app/Screens/new_screen.dart';
+import 'package:mission_app/Screens/registration.dart';
+import 'package:mission_app/Screens/verify.dart';
 import 'package:mission_app/Screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mission_app/components/add_events.dart';
@@ -36,6 +39,9 @@ class MyApp extends StatelessWidget {
         NewScreen.id: (context) => NewScreen(
               docId: null,
             ),
+        LoginScreen.id: (context) => LoginScreen(),
+        RegistrationScreen.id: (context) => RegistrationScreen(),
+        VerifyScreen.id: (context) => VerifyScreen()
       },
     );
   }

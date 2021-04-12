@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mission_app/components/sign_in.dart';
 
 import 'event_card.dart';
+import 'event_screen.dart';
 
 class InterestedEvents extends StatefulWidget {
   static const String id = "interested_events";
@@ -42,7 +43,7 @@ class _InterestedEventsState extends State<InterestedEvents> {
             for (var event in events) {
               if (event.data()["interested"] == null
                   ? false
-                  : event.data()["interested"].contains(email)) {
+                  : event.data()["interested"].contains(logUser.email)) {
                 final eventTitle = event.data()['title'];
                 final eventDescription = event.data()['description'];
                 final eventLocation = event.data()['event_location'];
@@ -59,7 +60,7 @@ class _InterestedEventsState extends State<InterestedEvents> {
                           .collection("events")
                           .doc("${event.id}")
                           .update({
-                        "interested": FieldValue.arrayRemove([email])
+                        "interested": FieldValue.arrayRemove([logUser.email])
                       });
                     },
                     document: docId,

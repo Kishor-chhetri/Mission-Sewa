@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:mission_app/Screens/event_screen.dart';
+import 'package:mission_app/Screens/login_screen.dart';
+import 'package:mission_app/Screens/registration.dart';
 import 'package:mission_app/components/rounded_button.dart';
 import 'package:mission_app/components/sign_in.dart';
+import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'event_screen.dart';
 
@@ -77,31 +80,45 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             SizedBox(
               height: 10,
             ),
-            RoundedButton(
-              title: 'Sign In With Google',
-              colour: Color(0xffeb1555),
-              onPressed: () async {
-                setState(() {
-                  showSpinner = true;
-                });
-                try {
-                  await signInWithGoogle().then((result) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return EventScreen();
-                        },
-                      ),
-                    );
-                  });
-                  setState(() {
-                    showSpinner = false;
-                  });
-                } catch (e) {
-                  print(e);
-                }
+            FirstScreenButton(
+              color: Color(0xffeb1555),
+              title: 'Log In',
+              onPressed: () {
+                Navigator.pushNamed(context, LoginScreen.id);
               },
             ),
+            FirstScreenButton(
+              color: Colors.blueAccent,
+              title: 'Register',
+              onPressed: () {
+                Navigator.pushNamed(context, RegistrationScreen.id);
+              },
+            ),
+            // RoundedButton(
+            //   title: 'Sign In With Google',
+            //   colour: Color(0xffeb1555),
+            //   onPressed: () async {
+            //     setState(() {
+            //       showSpinner = true;
+            //     });
+            //     try {
+            //       await signInWithGoogle().then((result) {
+            //         Navigator.of(context).push(
+            //           MaterialPageRoute(
+            //             builder: (context) {
+            //               return EventScreen();
+            //             },
+            //           ),
+            //         );
+            //       });
+            //       setState(() {
+            //         showSpinner = false;
+            //       });
+            //     } catch (e) {
+            //       print(e);
+            //     }
+            //   },
+            // ),
             SizedBox(
               height: 10,
             ),

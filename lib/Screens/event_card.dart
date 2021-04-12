@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:mission_app/components/sign_in.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 
+import 'event_screen.dart';
+
 class EventCard extends StatefulWidget {
   final String title;
   final String publisher;
@@ -49,7 +51,9 @@ class _EventCardState extends State<EventCard> {
           borderRadius: BorderRadius.all(
             Radius.circular(20),
           ),
-          color: email == widget.publisher ? Colors.black54 : Colors.white12,
+          color: logUser.email == widget.publisher
+              ? Colors.black54
+              : Colors.white12,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

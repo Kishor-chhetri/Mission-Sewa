@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mission_app/components/sign_in.dart';
 import 'event_card.dart';
+import 'event_screen.dart';
 
 class EventContainer extends StatefulWidget {
   const EventContainer({
@@ -88,7 +88,7 @@ class _EventContainerState extends State<EventContainer> {
                     btnName:
                         eventDates.toDate().difference(eventDate).inDays < 1
                             ? 'Finished'
-                            : event.data()['interested'].contains(email)
+                            : event.data()['interested'].contains(logUser.email)
                                 ? 'Joined'
                                 : 'Join',
                     btnFun: () {
@@ -101,7 +101,8 @@ class _EventContainerState extends State<EventContainer> {
                                 .collection("events")
                                 .doc("${event.id}")
                                 .update({
-                              "interested": FieldValue.arrayUnion([email])
+                              "interested":
+                                  FieldValue.arrayUnion([logUser.email])
                             });
                           } else {
                             showDialog(
@@ -135,7 +136,7 @@ class _EventContainerState extends State<EventContainer> {
                             .collection("events")
                             .doc("${event.id}")
                             .update({
-                          "interested": FieldValue.arrayUnion([email])
+                          "interested": FieldValue.arrayUnion([logUser.email])
                         });
                       } else {
                         showDialog(

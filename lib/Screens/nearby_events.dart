@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:intl/intl.dart';
-import 'package:mission_app/components/sign_in.dart';
+
+import 'event_screen.dart';
 
 class NearbyEvents extends StatefulWidget {
   static const String id = "nearby_events";
@@ -51,7 +52,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
           child: StreamBuilder<QuerySnapshot>(
               stream: fireStore
                   .collection("events")
-                  .where("publisher_id", isNotEqualTo: email)
+                  .where("publisher_id", isNotEqualTo: logUser.email)
                   .snapshots(),
               builder: (context, snap) {
                 if (!snap.hasData) {
@@ -81,10 +82,10 @@ class _NearbyEventsState extends State<NearbyEvents> {
                             borderRadius: BorderRadius.all(
                               Radius.circular(20),
                             ),
-                            color:
-                                email == snap.data.docs[index]["publisher_id"]
-                                    ? Colors.black54
-                                    : Colors.black54,
+                            color: logUser.email ==
+                                    snap.data.docs[index]["publisher_id"]
+                                ? Colors.black54
+                                : Colors.black54,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +129,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
                                                   .update({
                                                 "interested":
                                                     FieldValue.arrayUnion(
-                                                        [email])
+                                                        [logUser.email])
                                               });
                                             } else {
                                               showDialog(
@@ -166,7 +167,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
                                             ? Colors.grey
                                             : snap.data
                                                     .docs[index]['interested']
-                                                    .contains(email)
+                                                    .contains(logUser.email)
                                                 ? Colors.blueAccent
                                                 : Color(0xffeb1555),
                                         child: Text(
@@ -178,7 +179,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
                                               ? 'Finished'
                                               : snap.data
                                                       .docs[index]['interested']
-                                                      .contains(email)
+                                                      .contains(logUser.email)
                                                   ? 'Joined'
                                                   : 'Join',
                                         ))

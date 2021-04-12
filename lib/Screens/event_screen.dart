@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/home.dart';
@@ -10,6 +11,9 @@ import 'package:mission_app/components/add_events.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'event_container.dart';
 import 'welcome_screen.dart';
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+User logUser;
 
 class EventScreen extends StatefulWidget {
   static const String id = 'event_screen';
@@ -25,9 +29,21 @@ class _EventScreenState extends State<EventScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    getCurrentUser();
     _tabController = TabController(length: 5, vsync: this);
+  }
+
+  void getCurrentUser() {
+    try {
+      final user = auth.currentUser;
+      if (user != null) {
+        logUser = user;
+        print(logUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void eventsStream() async {
@@ -59,8 +75,8 @@ class _EventScreenState extends State<EventScreen>
         body: Column(
           children: [
             Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(20),
+              margin: EdgeInsets.all((15)),
+              padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: Colors.black54,
@@ -68,51 +84,36 @@ class _EventScreenState extends State<EventScreen>
               // height: 150.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Column(
                     children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          imageUrl,
-                        ),
-                        radius: 55,
-                        backgroundColor: Color(0xffeb1555),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
                       Text(
-                        name,
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                        'Welcome',
+                        style: TextStyle(fontSize: 25),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
-                        email,
+                        '${logUser.email}',
                         style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 15,
                             color: Colors.white,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      RoundedButton(
-                        colour: Color(0xffeb1555),
-                        title: 'Sign Out',
-                        onPressed: () {
-                          signOutGoogle();
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) {
-                            return WelcomeScreen();
-                          }), ModalRoute.withName('/'));
-                        },
+                            fontWeight: FontWeight.bold),
                       ),
                     ],
+                  ),
+                  RoundedButton(
+                    colour: Color(0xffeb1555),
+                    title: 'Sign Out',
+                    onPressed: () {
+                      auth.signOut();
+                      Navigator.pop(context);
+                      // Navigator.of(context).pushAndRemoveUntil(
+                      //     MaterialPageRoute(builder: (context) {
+                      //   return WelcomeScreen();
+                      // }), ModalRoute.withName('/'));
+                    },
                   ),
                 ],
               ),

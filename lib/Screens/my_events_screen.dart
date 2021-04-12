@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/new_screen.dart';
-import 'package:mission_app/components/sign_in.dart';
+import 'event_screen.dart';
 import 'event_card.dart';
 
 class MyEvents extends StatefulWidget {
@@ -29,7 +29,7 @@ class _MyEventsState extends State<MyEvents> {
           final events = snapshot.data.docs;
           List<EventCard> eventWidgets = [];
           for (var event in events) {
-            if (event.data()["publisher_id"] == email) {
+            if (event.data()["publisher_id"] == logUser.email) {
               final eventTitle = event.data()['title'];
               final eventDescription = event.data()['description'];
               final eventLocation = event.data()['event_location'];

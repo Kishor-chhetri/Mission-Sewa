@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mission_app/Screens/event_screen.dart';
 import 'package:mission_app/components/rounded_button.dart';
 import 'package:mission_app/components/city_name_list.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
-import 'sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final _auth = FirebaseAuth.instance;
-User loggedInUser;
+// final _auth = FirebaseAuth.instance;
+// User loggedInUser;
 
 class TaskScreen extends StatefulWidget {
   static const String id = "add_events";
@@ -57,23 +56,23 @@ class _TaskScreenState extends State<TaskScreen> {
 
   int eventId = 0;
 
-  String publisherId = email;
+  String publisherId = logUser.email.toString();
 
   String _selectedTime() {
     return "${selectedTime.hour}:${selectedTime.minute}";
   }
-
-  void getCurrentUser() {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-        print(loggedInUser);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  //
+  // void getCurrentUser() {
+  //   try {
+  //     final user = _auth.currentUser;
+  //     if (user != null) {
+  //       loggedInUser = user;
+  //       print(loggedInUser);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   setSearchParam(String title) {
     List<String> searchKeys = List();
