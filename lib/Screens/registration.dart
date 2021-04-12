@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mission_app/Screens/verify.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-
 import '../constants.dart';
 import 'event_screen.dart';
 
@@ -18,6 +18,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String email;
   String password;
   String name;
+  String description;
+  String phone_number;
 
   final auth = FirebaseAuth.instance;
 
@@ -53,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   name = value;
                 },
                 decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Enter Your Name'),
+                    kTextFieldDecoration.copyWith(hintText: 'Full Name'),
               ),
               SizedBox(
                 height: 8.0,
@@ -82,6 +84,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               SizedBox(
                 height: 24.0,
               ),
+              TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: 5,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  description = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Tell us about yourself'),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  phone_number = value;
+                },
+                decoration:
+                    kTextFieldDecoration.copyWith(hintText: 'Phone Number'),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
               FirstScreenButton(
                 color: Colors.blueAccent,
                 title: 'Register',
@@ -90,7 +117,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       .createUserWithEmailAndPassword(
                           email: email, password: password)
                       .then((_) {
-                    Navigator.pushNamed(context, VerifyScreen.id);
+                    FirebaseFirestore.instance.collection('users').add({
+                      'full_name': name,
+                      'email': email,
+                      'description': description,
+                      'phone_number': phone_number,
+                      'uid': auth.currentUser.uid
+                    });
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => VerifyScreen()));
                   });
                 },
               ),

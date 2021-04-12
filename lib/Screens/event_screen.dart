@@ -89,7 +89,7 @@ class _EventScreenState extends State<EventScreen>
                     children: [
                       Text(
                         'Welcome',
-                        style: TextStyle(fontSize: 25),
+                        style: TextStyle(fontSize: 30),
                       ),
                       SizedBox(
                         height: 5,
@@ -97,7 +97,7 @@ class _EventScreenState extends State<EventScreen>
                       Text(
                         '${logUser.email}',
                         style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 12,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),

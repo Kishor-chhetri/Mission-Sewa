@@ -76,7 +76,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       final user = await auth.signInWithEmailAndPassword(
                           email: email, password: password);
                       if (user != null) {
-                        Navigator.pushNamed(context, EventScreen.id);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EventScreen()));
                       }
                     } catch (e) {
                       print(e);
