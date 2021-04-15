@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/event_card.dart';
 import 'package:mission_app/Screens/event_screen.dart';
 import 'package:mission_app/components/add_events.dart';
-import 'package:mission_app/components/sign_in.dart';
 import '../mission_operation.dart';
 import 'package:url_launcher/url_launcher.dart';
 

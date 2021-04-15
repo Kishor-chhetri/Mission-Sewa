@@ -40,8 +40,6 @@ class _TaskScreenState extends State<TaskScreen> {
 
   String eventStreet;
 
-  int interested = 0;
-
   String eventTitle;
 
   String volunteerNumber;

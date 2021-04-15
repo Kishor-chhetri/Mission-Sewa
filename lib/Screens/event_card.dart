@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mission_app/components/sign_in.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
-
 import 'event_screen.dart';
 
 class EventCard extends StatefulWidget {

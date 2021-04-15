@@ -5,12 +5,10 @@ import 'package:mission_app/Screens/home.dart';
 import 'package:mission_app/Screens/nearby_events.dart';
 import 'package:mission_app/Screens/interested_events.dart';
 import 'package:mission_app/Screens/my_events_screen.dart';
-import 'package:mission_app/components/sign_in.dart';
 import 'package:mission_app/components/rounded_button.dart';
 import 'package:mission_app/components/add_events.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'event_container.dart';
-import 'welcome_screen.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 User logUser;

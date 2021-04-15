@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/event_screen.dart';
-import 'package:mission_app/components/sign_in.dart';
 import 'event_card.dart';
 import 'package:intl/intl.dart';
 
@@ -42,7 +41,7 @@ class _HomeContainerState extends State<HomeContainer> {
                       .snapshots(),
                   builder: (context, snap) {
                     if (!snap.hasData) {
-                      return CircularProgressIndicator();
+                      return Text("Loading");
                     }
                     if (snap.connectionState == ConnectionState.waiting) {
                       return Text("Loading");

@@ -84,6 +84,7 @@ class _EventContainerState extends State<EventContainer> {
                 var date = DateTime.parse(eventDates.toDate().toString());
                 final docId = event.id;
                 final publisherId = event.data()['publisher_id'];
+                final evt = event.data()['event_type'];
                 final eventWidget = EventCard(
                     btnName:
                         eventDates.toDate().difference(eventDate).inDays < 1
@@ -104,6 +105,16 @@ class _EventContainerState extends State<EventContainer> {
                               "interested":
                                   FieldValue.arrayUnion([logUser.email])
                             });
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .where('email', isEqualTo: logUser.email)
+                                .get()
+                                .then((value) => value.docs.forEach((element) {
+                                      element.reference.update({
+                                        'interested_types':
+                                            FieldValue.arrayUnion([evt])
+                                      });
+                                    }));
                           } else {
                             showDialog(
                                 barrierDismissible: true,
@@ -138,6 +149,16 @@ class _EventContainerState extends State<EventContainer> {
                             .update({
                           "interested": FieldValue.arrayUnion([logUser.email])
                         });
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .where('email', isEqualTo: logUser.email)
+                            .get()
+                            .then((value) => value.docs.forEach((element) {
+                                  element.reference.update({
+                                    'interested_types':
+                                        FieldValue.arrayUnion([evt])
+                                  });
+                                }));
                       } else {
                         showDialog(
                             barrierDismissible: true,

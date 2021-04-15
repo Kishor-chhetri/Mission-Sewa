@@ -5,7 +5,6 @@ import 'package:mission_app/Screens/verify.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import '../constants.dart';
-import 'event_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = 'registration_screen';
@@ -122,7 +121,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       'email': email,
                       'description': description,
                       'phone_number': phone_number,
-                      'uid': auth.currentUser.uid
+                      'uid': auth.currentUser.uid,
+                      'interested_types': [],
                     });
                     Navigator.pushReplacement(
                         context,

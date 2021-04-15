@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mission_app/components/sign_in.dart';
-
 import 'event_card.dart';
 import 'event_screen.dart';
 
