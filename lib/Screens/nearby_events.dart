@@ -317,7 +317,7 @@ class _NearbyEventsState extends State<NearbyEvents> {
             c(longAndLat[0] * p) *
             (1 - c((longAndLat[1] - userLong) * p)) /
             2;
-    return 1 + 12742 * asin(sqrt(a));
+    return 12742 * asin(sqrt(a));
   }
 
   Future<List<double>> _go(String cityNames) async {

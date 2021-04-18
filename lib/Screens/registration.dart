@@ -116,7 +116,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       .createUserWithEmailAndPassword(
                           email: email, password: password)
                       .then((_) {
-                    FirebaseFirestore.instance.collection('users').add({
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(auth.currentUser.uid)
+                        .set({
                       'full_name': name,
                       'email': email,
                       'description': description,
