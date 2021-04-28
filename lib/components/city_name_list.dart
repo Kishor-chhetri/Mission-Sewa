@@ -7,3 +7,5 @@ const List<String> eventType = [
   'Fund Raising',
   'Other'
 ];
+
+const List<String> userRole = ['Volunteer', 'Organizer', 'Both'];

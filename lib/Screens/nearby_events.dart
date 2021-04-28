@@ -25,7 +25,6 @@ class _NearbyEventsState extends State<NearbyEvents> {
   double userLat;
   double userLong;
   double distance;
-  // List<double> kms = List<double>();
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   List<QueryDocumentSnapshot> cityName = List<QueryDocumentSnapshot>();
   double km;

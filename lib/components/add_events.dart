@@ -123,7 +123,6 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
       color: Colors.black54,
       child: Container(
         decoration: BoxDecoration(

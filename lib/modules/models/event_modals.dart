@@ -283,3 +283,34 @@ class FirstScreenButton extends StatelessWidget {
     );
   }
 }
+
+class FutureWidget extends StatelessWidget {
+  final stream;
+  final String name;
+
+  FutureWidget({@required this.stream, @required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: stream,
+        builder: (context, snapshot) {
+          return snapshot.data == null
+              ? Text("Loading")
+              : Container(
+                  padding: EdgeInsets.all(30),
+                  color: Colors.teal,
+                  child: Column(
+                    children: [
+                      Text('${snapshot.data.size}',
+                          style: TextStyle(fontSize: 50)),
+                      Text(
+                        name,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                );
+        });
+  }
+}

@@ -5,7 +5,6 @@ import 'package:mission_app/Screens/home.dart';
 import 'package:mission_app/Screens/nearby_events.dart';
 import 'package:mission_app/Screens/interested_events.dart';
 import 'package:mission_app/Screens/my_events_screen.dart';
-import 'package:mission_app/components/rounded_button.dart';
 import 'package:mission_app/components/add_events.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'event_container.dart';
@@ -58,11 +57,48 @@ class _EventScreenState extends State<EventScreen>
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: false,
-              builder: (context) => TaskScreen(),
-            );
+            FirebaseFirestore.instance
+                .collection('users')
+                .where('uid', isEqualTo: logUser.uid)
+                .get()
+                .then((value) => {
+                      if (value.docs[0].data()["registered"])
+                        {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: false,
+                            builder: (context) => TaskScreen(),
+                          )
+                        }
+                      else
+                        {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Approval of Admin Needed'),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: <Widget>[
+                                      Text(
+                                          'If you have registered with all the necessary fields then it can takes up to a day or two. '),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      Text('For Further Enquiries'),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                          'You can contatct the admin at : kishor.chhetri8848@gmail.com'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        }
+                    });
           },
           backgroundColor: Color(0xffeb1555),
           child: Icon(
@@ -74,7 +110,7 @@ class _EventScreenState extends State<EventScreen>
           children: [
             Container(
               margin: EdgeInsets.all((15)),
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(25),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: Colors.black54,
@@ -84,6 +120,7 @@ class _EventScreenState extends State<EventScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
                         'Welcome',
@@ -92,34 +129,45 @@ class _EventScreenState extends State<EventScreen>
                       SizedBox(
                         height: 5,
                       ),
-                      Text(
-                        '${logUser.email}',
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
+                      FutureBuilder(
+                          future: _firestore
+                              .collection('users')
+                              .doc(logUser.uid)
+                              .get(),
+                          builder: (context, snapshot) {
+                            return snapshot.data == null
+                                ? Text("Loading")
+                                : Container(
+                                    padding: EdgeInsets.all(5),
+                                    child: Column(
+                                      children: [
+                                        Text('${snapshot.data["full_name"]}',
+                                            style: TextStyle(fontSize: 20)),
+                                      ],
+                                    ),
+                                  );
+                          }),
                     ],
                   ),
-                  RoundedButton(
-                    colour: Color(0xffeb1555),
-                    title: 'Sign Out',
-                    onPressed: () {
-                      auth.signOut();
-                      Navigator.pop(context);
-                      // Navigator.of(context).pushAndRemoveUntil(
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return WelcomeScreen();
-                      // }), ModalRoute.withName('/'));
-                    },
+                  SizedBox(
+                    width: 45,
                   ),
+                  GestureDetector(
+                      onTap: () {
+                        auth.signOut();
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.logout,
+                        color: Color(0xffeb1555),
+                      )),
                 ],
               ),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
               padding: EdgeInsets.all(10),
-              height: 45,
+              height: 50,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: Colors.black54,
@@ -159,9 +207,6 @@ class _EventScreenState extends State<EventScreen>
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 15,
             ),
             Expanded(
                 flex: 2,

@@ -90,31 +90,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },
             ),
-            // RoundedButton(
-            //   title: 'Sign In With Google',
-            //   colour: Color(0xffeb1555),
-            //   onPressed: () async {
-            //     setState(() {
-            //       showSpinner = true;
-            //     });
-            //     try {
-            //       await signInWithGoogle().then((result) {
-            //         Navigator.of(context).push(
-            //           MaterialPageRoute(
-            //             builder: (context) {
-            //               return EventScreen();
-            //             },
-            //           ),
-            //         );
-            //       });
-            //       setState(() {
-            //         showSpinner = false;
-            //       });
-            //     } catch (e) {
-            //       print(e);
-            //     }
-            //   },
-            // ),
             SizedBox(
               height: 10,
             ),

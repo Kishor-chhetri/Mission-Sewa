@@ -26,6 +26,8 @@ dependencies:
   path_provider:
   url_launcher: ^5.7.10
   flutter_email_sender:
+  firebase_storage:
+  image_picker: ^0.6.0+17
 
 
 
