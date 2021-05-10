@@ -14,12 +14,14 @@ class TaskScreen extends StatefulWidget {
   final String title;
   final String description;
   final String cityName;
+  final String district;
   final String streetName;
   final String noOfVolunters;
   final String phoneNumber;
 
   TaskScreen(
       {this.title,
+      this.district,
       this.description,
       this.cityName,
       this.streetName,
@@ -52,6 +54,8 @@ class _TaskScreenState extends State<TaskScreen> {
 
   String cityName;
 
+  String district;
+
   int eventId = 0;
 
   String publisherId = logUser.email.toString();
@@ -59,18 +63,6 @@ class _TaskScreenState extends State<TaskScreen> {
   String _selectedTime() {
     return "${selectedTime.hour}:${selectedTime.minute}";
   }
-  //
-  // void getCurrentUser() {
-  //   try {
-  //     final user = _auth.currentUser;
-  //     if (user != null) {
-  //       loggedInUser = user;
-  //       print(loggedInUser);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   setSearchParam(String title) {
     List<String> searchKeys = List();
@@ -170,6 +162,15 @@ class _TaskScreenState extends State<TaskScreen> {
               },
             ),
             TextFieldWidget(
+              hintText:
+                  widget.district == null ? "District" : '${widget.district}',
+              keyType: TextInputType.multiline,
+              maxLine: 1,
+              onChange: (value) {
+                district = value;
+              },
+            ),
+            TextFieldWidget(
               hintText: widget.phoneNumber == null
                   ? "Phone Number"
                   : '${widget.phoneNumber}',
@@ -252,6 +253,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     'phone_number': phoneNumber,
                     'time_stamp': DateTime.now().microsecondsSinceEpoch,
                     'event_type': selectedEventType,
+                    'district': district,
                   });
                   Navigator.pop(context);
                 } else {

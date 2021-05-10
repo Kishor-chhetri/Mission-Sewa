@@ -33,3 +33,5 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
+
+const kApiKey = 'AIzaSyArNYZOiBZAw7NCNIY0bcF7n4W1pV4nSjM';

@@ -2,12 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/home.dart';
-import 'package:mission_app/Screens/nearby_events.dart';
 import 'package:mission_app/Screens/interested_events.dart';
 import 'package:mission_app/Screens/my_events_screen.dart';
 import 'package:mission_app/components/add_events.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'event_container.dart';
+import 'nearby_event.dart';
+import 'nearby_events.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 User logUser;
@@ -214,7 +215,7 @@ class _EventScreenState extends State<EventScreen>
                   children: [
                     HomeContainer(),
                     EventContainer(firestore: _firestore),
-                    NearbyEvents(),
+                    NearbyEvent(),
                     MyEvents(),
                     InterestedEvents(
                       firestore: _firestore,

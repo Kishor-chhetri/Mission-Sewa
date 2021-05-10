@@ -206,34 +206,3 @@ class _EventContainerState extends State<EventContainer> {
   }
 }
 
-//
-// if (int.parse(event.data()["volunteer_number"]) <=
-// ((event.data()["interested"]).length - 1)) {
-// showDialog(
-// barrierDismissible: true,
-// context: context,
-// builder: (context) {
-// return Center(
-// child: Container(
-// height: 200,
-// child: AlertDialog(
-// title: Text("Fill up the empty fields."),
-// actions: [
-// FlatButton(
-// onPressed: () {
-// Navigator.pop(context);
-// },
-// child: Text("Okay")),
-// ],
-// elevation: 24.0,
-// ),
-// ),
-// );
-// });
-// }
-// FirebaseFirestore.instance
-//     .collection("events")
-// .doc("${event.id}")
-// .update({
-// "interested": FieldValue.arrayUnion([email])
-// });
