@@ -8,7 +8,6 @@ import 'package:mission_app/components/add_events.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'event_container.dart';
 import 'nearby_event.dart';
-import 'nearby_events.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 User logUser;

@@ -3,13 +3,11 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mission_app/constants.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'event_card.dart';
 import 'event_screen.dart';
 
 class NearbyEvent extends StatefulWidget {
@@ -82,6 +80,7 @@ class _NearbyEventState extends State<NearbyEvent> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height,
       child: StreamBuilder<QuerySnapshot>(
         stream: fireStore
             .collection("events")
@@ -103,220 +102,26 @@ class _NearbyEventState extends State<NearbyEvent> {
                   snap.data.docs[index]["event_date"].toDate().toString()));
               city = snap.data.docs[index]['city_name'];
               district = snap.data.docs[index]['district'];
-
+              final range = 10;
               return FutureBuilder(
                 future: getDistance(),
                 builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("Loading");
+                  }
+                  if (snapshot.data < range == false) {
+                    return SizedBox();
+                  }
                   return Container(
                     margin: EdgeInsets.all(15),
                     padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                      color:
-                          logUser.email == snap.data.docs[index]["publisher_id"]
-                              ? Colors.black54
-                              : Colors.black54,
-                    ),
+                    decoration: buildBoxDecoration(snap, index),
                     // ignore: missing_return
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  snap.data.docs[index]["title"].toString(),
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  onPressed: () {
-                                    if (eventDates
-                                            .toDate()
-                                            .difference(eventDate)
-                                            .inDays >
-                                        0.5) {
-                                      if ((int.parse(snap.data.docs[index]
-                                              ["volunteer_number"])) >
-                                          ((snap.data.docs[index]["interested"])
-                                              .length)) {
-                                        FirebaseFirestore.instance
-                                            .collection("events")
-                                            .doc("${snap.data.docs[index].id}")
-                                            .update({
-                                          "interested": FieldValue.arrayUnion(
-                                              [logUser.email])
-                                        });
-                                      } else {
-                                        showDialog(
-                                            barrierDismissible: true,
-                                            context: context,
-                                            builder: (context) {
-                                              return Center(
-                                                child: Container(
-                                                  height: 200,
-                                                  child: AlertDialog(
-                                                    title: Text(
-                                                        "Sorry, all seats are filled."),
-                                                    actions: [
-                                                      FlatButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: Text("Okay")),
-                                                    ],
-                                                    elevation: 24.0,
-                                                  ),
-                                                ),
-                                              );
-                                            });
-                                      }
-                                    }
-                                  },
-                                  color: eventDates
-                                              .toDate()
-                                              .difference(eventDate)
-                                              .inDays <
-                                          1
-                                      ? Colors.grey
-                                      : snap.data.docs[index]['interested']
-                                              .contains(logUser.email)
-                                          ? Colors.blueAccent
-                                          : Color(0xffeb1555),
-                                  child: Text(
-                                    eventDates
-                                                .toDate()
-                                                .difference(eventDate)
-                                                .inDays <
-                                            1
-                                        ? 'Finished'
-                                        : snap.data.docs[index]['interested']
-                                                .contains(logUser.email)
-                                            ? 'Joined'
-                                            : 'Join',
-                                  ))
-                            ]),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              snap.data.docs[index]["publisher_id"],
-                              style: TextStyle(
-                                color: Color(0xffeb1555),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.location_searching),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "${snapshot.data == null ? "calculating......" : snapshot.data.toStringAsFixed(2)} km near",
-                                  style: TextStyle(
-                                      fontSize: 18, color: Color(0xffeb1555)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text(snap.data.docs[index]["city_name"]),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  formatted,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text("Event time: " +
-                                snap.data.docs[index]['event_time']),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          ' '
-                          '  ${snap.data.docs[index]['description']}',
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontSize: 15,
-                            wordSpacing: 1.5,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "For Further Details:",
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontSize: 15,
-                            wordSpacing: 1.5,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Contact Number: ",
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                fontSize: 15,
-                                wordSpacing: 1.5,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print(snap.data.docs[index]["phone_number"]);
-                                setState(() {
-                                  makePhoneCall(
-                                      'tel: ${snap.data.docs[index]["phone_number"]}');
-                                });
-                              },
-                              child: Text(
-                                '${snap.data.docs[index]["phone_number"]}',
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  wordSpacing: 1.5,
-                                  letterSpacing: 1.5,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                    child: buildColumn(
+                        snap, index, eventDates, context, snapshot, formatted),
                     // ignore: missing_return
                   );
                 },
@@ -325,6 +130,197 @@ class _NearbyEventState extends State<NearbyEvent> {
           );
         },
       ),
+    );
+  }
+
+  Column buildColumn(AsyncSnapshot<QuerySnapshot> snap, int index, eventDates,
+      BuildContext context, AsyncSnapshot snapshot, String formatted) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Expanded(
+            child: Text(
+              snap.data.docs[index]["title"].toString(),
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              onPressed: () {
+                if (eventDates.toDate().difference(eventDate).inDays > 0.5) {
+                  if ((int.parse(snap.data.docs[index]["volunteer_number"])) >
+                      ((snap.data.docs[index]["interested"]).length)) {
+                    FirebaseFirestore.instance
+                        .collection("events")
+                        .doc("${snap.data.docs[index].id}")
+                        .update({
+                      "interested": FieldValue.arrayUnion([logUser.email])
+                    });
+                  } else {
+                    showDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return Center(
+                            child: Container(
+                              height: 200,
+                              child: AlertDialog(
+                                title: Text("Sorry, all seats are filled."),
+                                actions: [
+                                  FlatButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Okay")),
+                                ],
+                                elevation: 24.0,
+                              ),
+                            ),
+                          );
+                        });
+                  }
+                }
+              },
+              color: eventDates.toDate().difference(eventDate).inDays < 1
+                  ? Colors.grey
+                  : snap.data.docs[index]['interested'].contains(logUser.email)
+                      ? Colors.blueAccent
+                      : Color(0xffeb1555),
+              child: Text(
+                eventDates.toDate().difference(eventDate).inDays < 1
+                    ? 'Finished'
+                    : snap.data.docs[index]['interested']
+                            .contains(logUser.email)
+                        ? 'Joined'
+                        : 'Join',
+              ))
+        ]),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              snap.data.docs[index]["publisher_id"],
+              style: TextStyle(
+                color: Color(0xffeb1555),
+              ),
+            ),
+            Row(
+              children: [
+                Icon(Icons.location_searching),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "${snapshot.data == null ? "calculating......" : snapshot.data.toStringAsFixed(2)} km near",
+                  style: TextStyle(fontSize: 18, color: Color(0xffeb1555)),
+                ),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(snap.data.docs[index]["city_name"]),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  formatted,
+                  style: TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+            Text("Event time: " + snap.data.docs[index]['event_time']),
+          ],
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Text(
+          ' '
+          '  ${snap.data.docs[index]['description']}',
+          textAlign: TextAlign.justify,
+          style: TextStyle(
+            fontSize: 15,
+            wordSpacing: 1.5,
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          "For Further Details:",
+          textAlign: TextAlign.justify,
+          style: TextStyle(
+            fontSize: 15,
+            wordSpacing: 1.5,
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          children: [
+            Text(
+              "Contact Number: ",
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontSize: 15,
+                wordSpacing: 1.5,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                print(snap.data.docs[index]["phone_number"]);
+                setState(() {
+                  makePhoneCall(
+                      'tel: ${snap.data.docs[index]["phone_number"]}');
+                });
+              },
+              child: Text(
+                '${snap.data.docs[index]["phone_number"]}',
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  fontSize: 15,
+                  wordSpacing: 1.5,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  BoxDecoration buildBoxDecoration(
+      AsyncSnapshot<QuerySnapshot> snap, int index) {
+    return BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(20),
+      ),
+      color: logUser.email == snap.data.docs[index]["publisher_id"]
+          ? Colors.black54
+          : Colors.black54,
     );
   }
 }

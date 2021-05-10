@@ -11,8 +11,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:mission_app/components/add_events.dart';
 import 'package:mission_app/Screens/interested_events.dart';
 
-import 'Screens/nearby_events.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -44,7 +42,6 @@ class MyApp extends StatelessWidget {
         RegistrationScreen.id: (context) => RegistrationScreen(),
         VerifyScreen.id: (context) => VerifyScreen(),
         NearbyEvent.id: (context) => NearbyEvent(),
-        NearbyEvents.id: (context) => NearbyEvents()
       },
     );
   }
