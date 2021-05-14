@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:mission_app/Screens/login_screen.dart';
 import 'package:mission_app/Screens/registration.dart';
+import 'package:mission_app/Screens/reset_password.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+
+import 'event_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -80,7 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               color: Color(0xffeb1555),
               title: 'Log In',
               onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+                Navigator.pushReplacementNamed(context, LoginScreen.id);
               },
             ),
             FirstScreenButton(

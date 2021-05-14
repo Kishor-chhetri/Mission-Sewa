@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/event_screen.dart';
 import 'package:mission_app/Screens/login_screen.dart';
@@ -27,7 +28,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         accentColor: Color(0x11eb1555),
       ),
-      initialRoute: WelcomeScreen.id,
+      initialRoute: FirebaseAuth.instance.currentUser != null
+          ? EventScreen.id
+          : WelcomeScreen.id,
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
         EventScreen.id: (context) => EventScreen(),

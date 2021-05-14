@@ -8,7 +8,6 @@ import 'package:mission_app/Screens/verify.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import '../constants.dart';
-import 'package:mission_app/components/city_name_list.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -277,17 +276,3 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 }
-
-// uploadImage() async {
-//   final _picker = ImagePicker();
-//   PickedFile image;
-//
-//   image = await _picker.getImage(source: ImageSource.gallery);
-//   var file = File(image.path);
-//
-//   var snapshot = await _storage
-//       .ref()
-//       .child('folderName/ImageName')
-//       .putFile(file)
-//       .onComplete;
-// }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/home.dart';
 import 'package:mission_app/Screens/interested_events.dart';
 import 'package:mission_app/Screens/my_events_screen.dart';
+import 'package:mission_app/Screens/welcome_screen.dart';
 import 'package:mission_app/components/add_events.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'event_container.dart';
@@ -155,7 +156,10 @@ class _EventScreenState extends State<EventScreen>
                   GestureDetector(
                       onTap: () {
                         auth.signOut();
-                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WelcomeScreen()));
                       },
                       child: Icon(
                         Icons.logout,
@@ -194,13 +198,13 @@ class _EventScreenState extends State<EventScreen>
                     semanticLabel: 'Near Me',
                   ),
                   Icon(
-                    Icons.perm_contact_calendar,
+                    Icons.check_box,
                     color: Colors.white,
                     size: 24,
                     semanticLabel: 'My Events',
                   ),
                   Icon(
-                    Icons.check_box,
+                    Icons.perm_contact_calendar,
                     color: Colors.white,
                     size: 24,
                     semanticLabel: 'Interested Events',

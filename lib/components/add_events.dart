@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mission_app/Screens/event_screen.dart';
 import 'package:mission_app/components/rounded_button.dart';
-import 'package:mission_app/components/city_name_list.dart';
 import 'package:mission_app/modules/models/event_modals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-// final _auth = FirebaseAuth.instance;
-// User loggedInUser;
+import '../constants.dart';
 
 class TaskScreen extends StatefulWidget {
   static const String id = "add_events";
@@ -55,8 +52,6 @@ class _TaskScreenState extends State<TaskScreen> {
   String cityName;
 
   String district;
-
-  int eventId = 0;
 
   String publisherId = logUser.email.toString();
 
@@ -245,7 +240,6 @@ class _TaskScreenState extends State<TaskScreen> {
                     'street_name': eventStreet,
                     'event_time': _selectedTime(),
                     'publisher_id': publisherId,
-                    'event_id': eventId,
                     'event_location': eventCity,
                     'volunteer_number': volunteerNumber,
                     'interested': [],
@@ -287,49 +281,3 @@ class _TaskScreenState extends State<TaskScreen> {
     );
   }
 }
-
-// class TextFieldWidget extends StatelessWidget {
-//   TextFieldWidget(
-//       {@required this.hintText,
-//       this.keyType,
-//       this.maxLine,
-//       @required this.onChange});
-//
-//   final String hintText;
-//   final TextInputType keyType;
-//   final int maxLine;
-//   final Function onChange;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsets.all(4.0),
-//       child: TextField(
-//         onChanged: onChange,
-//         keyboardType: keyType,
-//         maxLines: maxLine,
-//         autofocus: false,
-//         textAlign: TextAlign.left,
-//         style: TextStyle(
-//           fontSize: 16,
-//         ),
-//         decoration: InputDecoration(
-//           contentPadding: EdgeInsets.all(10),
-//           enabled: true,
-//           enabledBorder: OutlineInputBorder(
-//             borderSide: BorderSide(
-//               color: Color(0xffeb1555),
-//             ),
-//           ),
-//           focusedBorder: OutlineInputBorder(
-//             borderSide: BorderSide(
-//               color: Color(0xffeb1555),
-//             ),
-//           ),
-//           hintText: hintText,
-//         ),
-//         cursorColor: Colors.white,
-//       ),
-//     );
-//   }
-// }

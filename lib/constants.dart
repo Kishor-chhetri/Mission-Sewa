@@ -35,3 +35,15 @@ const kTextFieldDecoration = InputDecoration(
 );
 
 const kApiKey = 'AIzaSyArNYZOiBZAw7NCNIY0bcF7n4W1pV4nSjM';
+
+const List<String> eventType = [
+  'Blood Donation',
+  'Food Donation',
+  'Clothes Donation',
+  'Cleaning and Management',
+  'Plantation',
+  'Fund Raising',
+  'Other'
+];
+
+const List<String> userRole = ['Volunteer', 'Organizer', 'Both'];
